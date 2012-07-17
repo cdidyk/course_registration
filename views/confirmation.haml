@@ -1,0 +1,25 @@
+%div
+  %h3 Thank you!
+  %p Your registration and payment have been accepted and a confirmation email/receipt will be sent to you shortly.
+  %p If you have any questions or need further help, please contact Chris Didyk at cdidyk@gmail.com or (727) 453-2490.
+  %p Enjoy the Festival!
+
+  %h3 Registration Info
+  %ul
+    %li
+      Name:
+      = name
+    %li
+      Email:
+      = email
+    %li
+      Phone:
+      = phone
+
+  %h4 Courses
+  %ul
+    - courses.each do |course|
+      %li= course
+
+  %h4 Amount Charged
+  %p= display_money(total)
