@@ -1,0 +1,47 @@
+%div
+  %p Register and pay below.
+
+  %form{ action: "/register", method: "post" }
+
+    %p
+      %input{ type: "checkbox", name: "courses[]", id: "generating_energy_flow", value: "generating energy flow" }
+      %label{ for: "generating_energy_flow" }
+        %strong Generating Energy Flow*
+
+    %p
+      %input{ type: "checkbox", name: "courses[]", id: "all_tcc", value: "all tcc" }
+      %label{ for: "all_tcc" }
+        %strong The Essence of All Tai Chi Chuan*
+
+    %p
+      %input{ type: "checkbox", name: "courses[]", id: "cosmic_shower", value: "cosmic shower" }
+      %label{ for: "cosmic_shower" }
+        %strong Cosmic Shower
+
+    %p
+      %input{ type: "checkbox", name: "courses[]", id: "yang", value: "yang" }
+      %label{ for: "yang" }
+        %strong The Essence of Yang-style Tai Chi Chuan
+
+    %p
+      %input{ type: "checkbox", name: "courses[]", id: "abdominal", value: "abdominal breathing" }
+      %label{ for: "abdominal" }
+        %strong Abdominal Breathing
+
+    %p
+      %input{ type: "checkbox", name: "courses[]", id: "chen", value: "chen" }
+      %label{ for: "chen" }
+        %strong The Essence of Chen-style Tai Chi Chuan
+
+    %p
+      %input{ type: "checkbox", name: "courses[]", id: "merging", value: "merging with the cosmos" }
+      %label{ for: "merging" }
+        %strong Merging with the Cosmos
+
+    %p
+      %input{ type: "checkbox", name: "courses[]", id: "wudang", value: "wudang" }
+      %label{ for: "wudang" }
+        %strong The Essence of Wudang Tai Chi Chuan
+
+    %p
+      %input{ type: "submit", value: "Register" }

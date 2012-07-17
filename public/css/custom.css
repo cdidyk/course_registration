@@ -1,0 +1,70 @@
+a, a > * {
+    color: #b80508;
+}
+
+section a:hover, section a > *:hover {
+    text-decoration: underline;
+}
+
+#header #logo h1 {
+    display: block;
+    background: #fff url(../site_img/shaolin_wahnam_logo_sm.jpg) no-repeat left center;
+    line-height: 86px;
+    padding-left: 100px;
+    color: #b80508;
+    font-family: 'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+    font-weight: 800;
+}
+
+.slides-container {
+    background-color: #6FC4BD;
+}
+
+.ss-slider .pagination-container a {
+    background-color: rgba(184, 5, 3, 0.6);
+}
+
+.ss-slider .pagination-container a:hover, .ss-slider.hide-content:hover .pagination-container a:hover {
+    background-color: rgba(184, 5, 3, 1);
+}
+
+body {
+    color: #474747;
+    font: 13px/1.5 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+}
+
+section h1, section h2, section h3, section h4, section h5, section h6, .page-title {
+    font-weight: 500;
+    color: #909090;
+}
+
+.accented {
+    color: #b80508;
+}
+
+dl dt {
+    font-weight: bold;
+}
+
+dl dd {
+    padding: 0 20px 15px 25px;
+}
+
+.contact-info li {
+    list-style: none;
+    margin: 0 0 5px 24px;
+    padding: 0 0 0 24px;
+    text-align: left;
+}
+
+#footer .contact-info a {
+    color: #b80508;
+}
+
+#footer .contact-info a:hover {
+    text-decoration: underline;
+}
+
+.team-member {
+    padding-top: 10px;
+}
