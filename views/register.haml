@@ -1,0 +1,61 @@
+%div
+  %p You are registering for the following courses:
+  %ul
+    - courses.each do |course|
+      %li= course
+
+  %p
+    Your total cost (including discounts) is:
+    = total
+
+
+  %form{ action: "/finalize", method: "post", id: "payment_form" }
+    %fieldset
+      %legend Credit Card Info
+      %p
+        %label{ for: "card_number" } Credit Card Number
+        %input{ type: "text", size: "20", autocomplete: "off", id: "card_number" }
+
+      %p
+        %label{ for: "card_cvc" } CVC
+        %input{ type: "text", size: "4", autocomplete: "off", id: "card_cvc" }
+
+      %p
+        %label{ for: "card_expiry_month" }
+        %select#card_expiry_month
+          %option{ value: "01" } 01 - January
+          %option{ value: "02" } 02 - February
+          %option{ value: "03" } 03 - March
+          %option{ value: "04" } 04 - April
+          %option{ value: "05" } 05 - May
+          %option{ value: "06" } 06 - June
+          %option{ value: "07" } 07 - July
+          %option{ value: "08" } 08 - August
+          %option{ value: "09" } 09 - September
+          %option{ value: "10" } 10 - October
+          %option{ value: "11" } 11 - November
+          %option{ value: "12" } 12 - December
+
+      %p
+        %label{ for: "card_expiry_year" }
+        %select#card_expiry_year
+          - (2012..2030).each do |year|
+            %option{ value: year }= year
+
+    %fieldset
+      %legend Registration Info
+
+      %p
+        %label{ for: "name" } Name
+        %input{ type: "text", size: "25", name: "name", id: "registrant_name" }
+
+      %p
+        %label{ for: "email" } Email
+        %input{ type: "text", size: "25", name: "email", id: "registrant_email" }
+
+      %p
+        %label{ for: "phone" } Phone
+        %input{ type: "text", size: "20", name: "phone", id: "registrant_phone" }
+
+    %p
+      %input{ type: "submit", value: "Pay and Finalize Registration", id: "submit_button" }
