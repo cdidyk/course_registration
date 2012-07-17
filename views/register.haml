@@ -6,10 +6,12 @@
 
   %p
     Your total cost (including discounts) is:
-    = total
+    = display_money total
 
 
   %form{ action: "/finalize", method: "post", id: "payment_form" }
+    %input{ type: "hidden", name: "total", value: total }
+    %input{ type: "hidden", name: "courses", value: courses.join(',') }
     %fieldset
       %legend Credit Card Info
       %p
