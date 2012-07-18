@@ -11,7 +11,7 @@ configure do
   if production?
     # intentionally blank...for now
   else
-    Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['test_private_key']
+    Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['private_key']
     ActionMailer::Base.delivery_method = :file
     ActionMailer::Base.logger = Logger.new(STDOUT)
     ActionMailer::Base.perform_deliveries = true
