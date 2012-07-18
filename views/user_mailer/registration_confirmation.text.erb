@@ -1,0 +1,33 @@
+Hello,
+
+Thank you for registering for the <%= @registrant.event %>. I am certain it will exceed your expectations!
+
+Here is the confirmed registration info:
+
+Name: <%= @registrant.name %>
+Email: <%= @registrant.email %>
+Phone: <%= @registrant.phone %>
+
+Courses:
+<%- @registrant.courses.each do |course| %>
+  - <%= course %>
+<%- end %>
+
+Amount Charged: <%= @amount_paid %>
+
+If this doesn't look right to you, please send me an email (cdidyk@gmail.com) or call me (727.453.2490).
+
+Grandmaster Wong will ensure that you have a great time in your course(s), but I want to make sure you have a great time in St. Petersburg, too. To that end, I'll be adding information on transportation, hotels, and restaurants to the website, but if I can help you further in that regard or if you have any other questions, please contact me. Email is usually best, but if I miss your phone call and you leave me a message, I will return your call promptly.
+
+Enjoy the <%= @registrant.event %>!
+
+
+Best wishes,
+Chris
+
+
+Sifu Chris Didyk
+Shaolin Wahnam St. Pete
+http://shaolinstpete.com/festival/
+cdidyk@gmail.com
+727.453.2490

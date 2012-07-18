@@ -2,17 +2,30 @@ require 'sinatra'
 require 'stripe'
 require 'yaml'
 require 'haml'
+require 'action_mailer'
 
 require 'sinatra/reloader' if development?
 
-Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['private_key']
+
+configure do
+  if production?
+    # intentionally blank...for now
+  else
+    Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['test_private_key']
+    ActionMailer::Base.delivery_method = :file
+    ActionMailer::Base.logger = Logger.new(STDOUT)
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.raise_delivery_errors = true
+    ActionMailer::Base.view_paths = File.join Sinatra::Application.root, 'views'
+  end
+end
 
 helpers do
   include Rack::Utils
   alias_method :h, :escape
 
   def display_money cents
-    "$#{cents/100.0}"
+    MoneyFormatter.display cents
   end
 end
 
@@ -32,9 +45,31 @@ post "/finalize" do
              currency: "usd",
              card: params[:stripeToken],
              description: "#{params[:name]}: #{params[:courses]}")
+  @registrant = OpenStruct.new name: params[:name], email: params[:email], phone: params[:phone], courses: params[:courses].split(','), amount_paid: charge.amount, stripe_charge_id: charge.id, event: "2012 Tai Chi Chuan Festival" #Registrant.create params[:registrant]
+  UserMailer.registration_confirmation(@registrant).deliver
   haml :confirmation, locals: {name: params[:name], email: params[:email], phone: params[:phone], courses: params[:courses].split(','), total: charge.amount}
 end
 
+class UserMailer < ActionMailer::Base
+  default from: "no-reply@shaolinstpete.com"
+
+  def registration_confirmation registrant
+    @registrant = registrant
+    @amount_paid = MoneyFormatter.display registrant.amount_paid
+    mail to: registrant.email, subject: "#{registrant.event} registration confirmation"
+  end
+end
+
+# class Registrant
+#   def self.create
+#   end
+# end
+
+class MoneyFormatter
+  def self.display cents
+    "$#{sprintf('%.2f', (cents/100.0))}"
+  end
+end
 
 class PriceCalculator
   attr_reader :courses
