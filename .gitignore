@@ -2,3 +2,4 @@ tmp/*
 *.log
 .DS_Store
 config/stripe.yml
+config/mongoid.yml
