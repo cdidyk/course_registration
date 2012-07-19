@@ -36,12 +36,17 @@ helpers do
 end
 
 get "/courses" do
-  haml :courses
+  haml :courses, locals: {error: ""}
 end
 
 post "/register" do
   courses = params[:courses]
-  haml :register, locals: {courses: courses, total: PriceCalculator.new(courses).total}
+
+  if courses.blank?
+    haml :courses, locals: {error: "Please select the courses you wish to register for"}
+  else
+    haml :register, locals: {courses: courses, total: PriceCalculator.new(courses).total}
+  end
 end
 
 #TODO change from /finalize to /confirmation ?
