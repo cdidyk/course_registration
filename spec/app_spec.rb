@@ -31,16 +31,23 @@ describe "/finalize" do
 
 
   let(:params) {
-    { name: 'Paul Funktower',
-      email: 'pfunk@example.com',
-      phone: '(555) 123-1234',
-      total: '30000',
+    { registration: {
+        name: 'Paul Funktower',
+        email: 'pfunk@example.com',
+        phone: '(555) 123-1234',
+        amount_paid: '30000' },
       courses: 'Generating Energy Flow,The Essence of All Tai Chi Chuan',
       stripeToken: 'abc123'
     }
   }
   let(:stripe_charge) { stub Stripe::Charge, amount: 30000, id: 'jb007', fee: 900 }
-  let(:registration) { stub Registration }
+  let(:registration) {
+    Registration.new(name: "name",
+                     email: "email",
+                     phone: "phone",
+                     courses: ["Some", "Courses"],
+                     amount_paid: 0)
+  }
 
   before :each do
     Stripe::Charge.stub create: stripe_charge

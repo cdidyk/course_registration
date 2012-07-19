@@ -6,11 +6,11 @@
 
   %p
     Your total cost (including discounts) is:
-    = display_money(total)
+    = display_money total
 
 
   %form{ action: "/finalize", method: "post", id: "payment_form" }
-    %input{ type: "hidden", name: "total", value: total }
+    %input{ type: "hidden", name: "registration[amount_paid]", value: total }
     %input{ type: "hidden", name: "courses", value: courses.join(',') }
     %fieldset
       %legend Credit Card Info
@@ -49,15 +49,15 @@
 
       %p
         %label{ for: "name" } Name
-        %input{ type: "text", size: "25", name: "name", id: "registration_name" }
+        %input{ type: "text", size: "25", name: "registration[name]", id: "registration_name" }
 
       %p
         %label{ for: "email" } Email
-        %input{ type: "text", size: "25", name: "email", id: "registration_email" }
+        %input{ type: "text", size: "25", name: "registration[email]", id: "registration_email" }
 
       %p
         %label{ for: "phone" } Phone
-        %input{ type: "text", size: "20", name: "phone", id: "registration_phone" }
+        %input{ type: "text", size: "20", name: "registration[phone]", id: "registration_phone" }
 
     %p
       %input{ type: "submit", value: "Pay and Finalize Registration", id: "submit_button" }

@@ -53,15 +53,25 @@ end
 post "/finalize" do
   charge =
     Stripe::Charge.
-      create(amount: params[:total],
+      create(amount: params[:registration][:amount_paid],
              currency: "usd",
              card: params[:stripeToken],
-             description: "#{params[:name]}: #{params[:courses]}")
+             description: "#{params[:registration][:name]}: #{params[:courses]}")
 
-  #TODO make params under registration so we can just do: Registration.create params[:registration]
-  @registration = Registration.create name: params[:name], email: params[:email], phone: params[:phone], courses: params[:courses].split(','), amount_paid: charge.amount, stripe_charge_id: charge.id, stripe_fee: charge.fee, event: "2012 Tai Chi Chuan Festival"
-  UserMailer.registration_confirmation(@registration).deliver
-  haml :confirmation, locals: {name: params[:name], email: params[:email], phone: params[:phone], courses: params[:courses].split(','), total: charge.amount}
+  @registration =
+    Registration.
+      create( params[:registration].
+                merge({courses: params[:courses].split(','),
+                       amount_paid: charge.amount,
+                       stripe_charge_id: charge.id,
+                       stripe_fee: charge.fee,
+                       event: "2012 Tai Chi Chuan Festival"}) )
+
+  UserMailer.
+    registration_confirmation(@registration).
+    deliver
+
+  haml :confirmation, locals: {registration: @registration}
 end
 
 
