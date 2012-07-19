@@ -100,15 +100,81 @@ class MoneyFormatter
 end
 
 class PriceCalculator
-  attr_reader :courses
+  attr_reader :courses, :tcc, :ck
+
+  COURSE_LIST = [OpenStruct.new(name: "Generating Energy Flow", art: "chi kung"),
+                 OpenStruct.new(name: "Cosmic Shower", art: "chi kung"),
+                 OpenStruct.new(name: "Abdominal Breathing", art: "chi kung"),
+                 OpenStruct.new(name: "Merging with the Cosmos", art: "chi kung"),
+                 OpenStruct.new(name: "The Essence of All Tai Chi Chuan", art: "tcc"),
+                 OpenStruct.new(name: "The Essence of Yang-style Tai Chi Chuan", art: "tcc"),
+                 OpenStruct.new(name: "The Essence of Chen-style Tai Chi Chuan", art: "tcc"),
+                 OpenStruct.new(name: "The Essence of Wudang Tai Chi Chuan", art: "tcc")]
+
+  # Pricing structure:
+  # 1 CK course: $300
+  # 1 TCC course: $500
+  # 1 CK course + 1 TCC course: $700
+  # all CK courses: $1000
+  # all TCC courses: $1300
+  # everything: $1800
+  CK_UNIT_PRICE = 30000
+  TCC_UNIT_PRICE = 50000
+  ONE_OF_EACH_PRICE = 70000
+  ALL_CK_PRICE = 100000
+  ALL_TCC_PRICE = 130000
+  EVERYTHING_PRICE = 180000
 
   def initialize courses
-    @courses = courses
+    @courses = courses.uniq
+    @tcc = @courses.find_all {|c| tcc_course_list.include? c }
+    @ck = @courses.find_all {|c| ck_course_list.include? c }
+  end
+
+  def ck_course_list
+    COURSE_LIST.find_all {|c| c.art == "chi kung" }.map(&:name)
+  end
+
+  def tcc_course_list
+    COURSE_LIST.find_all {|c| c.art == "tcc" }.map(&:name)
   end
 
   #NOTE in cents
   def total
-    #TODO discount logic
-    3695
+    return EVERYTHING_PRICE if all_courses?
+
+    if tcc.size == 0
+      [(ck.size * CK_UNIT_PRICE), ALL_CK_PRICE].min
+    elsif ck.size == 0
+      [(tcc.size * TCC_UNIT_PRICE), ALL_TCC_PRICE].min
+    else
+      [one_of_each_strategy, all_ck_strategy, all_tcc_strategy, EVERYTHING_PRICE].min
+    end
+  end
+
+  def one_of_each_strategy
+    course_pairs = [tcc.size, ck.size].min
+    sticker_price = ONE_OF_EACH_PRICE * course_pairs
+
+    if tcc.size > ck.size
+      sticker_price += (tcc.size - course_pairs) * TCC_UNIT_PRICE
+    else
+      sticker_price += (ck.size - course_pairs) * CK_UNIT_PRICE
+    end
+
+    sticker_price
+  end
+
+  def all_ck_strategy
+    ALL_CK_PRICE + (tcc.size * TCC_UNIT_PRICE)
+  end
+
+  def all_tcc_strategy
+    ALL_TCC_PRICE + (ck.size * CK_UNIT_PRICE)
+  end
+
+  #TODO get rid of this if the min strategy approach makes #total's guard clause unnecessary
+  def all_courses?
+    COURSE_LIST.map(&:name).all? {|c| courses.include? c }
   end
 end

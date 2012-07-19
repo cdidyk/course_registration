@@ -89,3 +89,191 @@ describe "/finalize" do
     post '/finalize', params
   end
 end
+
+describe PriceCalculator do
+  include Rack::Test::Methods
+  let(:app) { Sinatra::Application }
+  let(:courses) {
+    { energy_flow: 'Generating Energy Flow',
+      shower: 'Cosmic Shower',
+      ab: 'Abdominal Breathing',
+      cosmos: 'Merging with the Cosmos',
+      tcc: 'The Essence of All Tai Chi Chuan',
+      yang: 'The Essence of Yang-style Tai Chi Chuan',
+      chen: 'The Essence of Chen-style Tai Chi Chuan',
+      wudang: 'The Essence of Wudang Tai Chi Chuan' }
+  }
+
+  describe "#total" do
+    context "Chi Kung only" do
+      it "should be $300 for 1 Chi Kung course" do
+        PriceCalculator.
+          new([courses[:energy_flow]]).
+          total.should == 30000
+      end
+
+      it "should be $600 for 2 Chi Kung courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower]]).
+          total.should == 60000
+      end
+
+      it "should be $900 for 3 Chi Kung courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab]]).
+          total.should == 90000
+      end
+
+      it "should be $1000 for all 4 Chi Kung courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos]]).
+          total.should == 100000
+      end
+    end
+
+    context "Tai Chi Chuan only" do
+      it "should be $500 for 1 Tai Chi Chuan course" do
+        PriceCalculator.
+          new([courses[:tcc]]).
+          total.should == 50000
+      end
+
+      it "should be $1000 for 2 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:tcc], courses[:wudang]]).
+          total.should == 100000
+      end
+
+      it "should be $1300 for 3 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:tcc], courses[:yang], courses[:wudang]]).
+          total.should == 130000
+      end
+
+      it "should be $1300 for all 4 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:tcc], courses[:yang], courses[:chen], courses[:wudang]]).
+          total.should == 130000
+      end
+    end
+
+    context "combinations of Chi Kung and Tai Chi Chuan courses" do
+      it "should be $700 for 1 Chi Kung course and 1 Tai Chi Chuan course" do
+        PriceCalculator.
+          new([courses[:energy_flow],
+               courses[:tcc]]).
+          total.should == 70000
+      end
+
+      it "should be $1200 for 1 Chi Kung course and 2 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow],
+               courses[:tcc], courses[:wudang]]).
+          total.should == 120000
+      end
+
+      it "should be $1600 for 1 Chi Kung course and 3 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow],
+               courses[:tcc], courses[:wudang], courses[:chen]]).
+          total.should == 160000
+      end
+
+      it "should be $1600 for 1 Chi Kung course and all 4 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow],
+               courses[:tcc], courses[:wudang], courses[:chen], courses[:yang]]).
+          total.should == 160000
+      end
+
+      it "should be $1000 for 2 Chi Kung courses and 1 Tai Chi Chuan course" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:tcc]]).
+          total.should == 100000
+      end
+
+      it "should be $1400 for 2 Chi Kung courses and 2 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:wudang], courses[:chen]]).
+          total.should == 140000
+      end
+
+      it "should be $1800 for 2 Chi Kung courses and 3 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:tcc], courses[:wudang], courses[:chen]]).
+          total.should == 180000
+      end
+
+      it "should be $1800 for 2 Chi Kung courses and all 4 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:tcc], courses[:yang], courses[:wudang], courses[:chen]]).
+          total.should == 180000
+      end
+
+      it "should be $1300 for 3 Chi Kung courses and 1 Tai Chi Chuan course" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc]]).
+          total.should == 130000
+      end
+
+      it "should be $1700 for 3 Chi Kung courses and 2 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang]]).
+          total.should == 170000
+      end
+
+      it "should be $1800 for 3 Chi Kung courses and 3 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang], courses[:chen]]).
+          total.should == 180000
+      end
+
+      it "should be $1800 for 3 Chi Kung courses and all 4 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang], courses[:chen], courses[:yang]]).
+          total.should == 180000
+      end
+
+      it "should be $1500 for all 4 Chi Kung courses and 1 Tai Chi Chuan course" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
+               courses[:tcc]]).
+          total.should == 150000
+      end
+
+      it "should be $1800 for all 4 Chi Kung courses and 2 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
+               courses[:tcc], courses[:yang]]).
+          total.should == 180000
+      end
+
+      it "should be $1800 for all 4 Chi Kung courses and 3 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
+               courses[:tcc], courses[:yang], courses[:chen]]).
+          total.should == 180000
+      end
+
+      it "should be $1800 for all 4 Chi Kung courses and all 4 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new(courses.values).
+          total.should == 180000
+      end
+    end
+
+    it "should ignore courses it doesn't recognize" do
+      PriceCalculator.
+        new([courses[:energy_flow], "Wishful Thinking"]).
+        total.should == 30000
+    end
+  end
+end
