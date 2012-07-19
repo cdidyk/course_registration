@@ -141,8 +141,6 @@ class PriceCalculator
 
   #NOTE in cents
   def total
-    return EVERYTHING_PRICE if all_courses?
-
     if tcc.size == 0
       [(ck.size * CK_UNIT_PRICE), ALL_CK_PRICE].min
     elsif ck.size == 0
@@ -171,10 +169,5 @@ class PriceCalculator
 
   def all_tcc_strategy
     ALL_TCC_PRICE + (ck.size * CK_UNIT_PRICE)
-  end
-
-  #TODO get rid of this if the min strategy approach makes #total's guard clause unnecessary
-  def all_courses?
-    COURSE_LIST.map(&:name).all? {|c| courses.include? c }
   end
 end
