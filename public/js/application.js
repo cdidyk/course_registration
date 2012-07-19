@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $("#token_error").hide();
+
     $("#payment_form").submit(function(event) {
         // disable the submit button to prevent repeated clicks
         $('#submit_button').attr("disabled", "disabled");
@@ -17,10 +19,11 @@ $(document).ready(function() {
     stripeResponseHandler = function(status, response) {
         if (response.error) {
             // show the errors on the form
-            $(".error").text(response.error.message);
-            $(".error").show();
+            $("#token_error").text(response.error.message);
+            $("#token_error").show();
             $("#submit_button").removeAttr("disabled");
         } else {
+            $("#token_error").hide();
             var form$ = $("#payment_form");
             // token contains id, last4, and card type
             var token = response['id'];

@@ -11,6 +11,8 @@ configure :test do
   RSpec.configure do |config|
     config.mock_with :rspec
 
+    config.include Rack::Test::Methods
+
     config.before(:suite) do
       DatabaseCleaner[:mongoid].strategy = :truncation
     end
@@ -26,9 +28,7 @@ configure :test do
 end
 
 describe "/finalize" do
-  include Rack::Test::Methods
   let(:app) { Sinatra::Application }
-
 
   let(:params) {
     { registration: {
@@ -42,63 +42,110 @@ describe "/finalize" do
   }
   let(:stripe_charge) { stub Stripe::Charge, amount: 30000, id: 'jb007', fee: 900 }
   let(:registration) {
-    Registration.new(name: "name",
-                     email: "email",
-                     phone: "phone",
-                     courses: ["Some", "Courses"],
-                     amount_paid: 0)
+    Registration.new(
+         name: "name",
+         email: "email",
+         phone: "phone",
+         courses: ["Some", "Courses"],
+         event: "2012 Tai Chi Chuan Festival",
+         amount_paid: 0)
   }
 
   before :each do
     Stripe::Charge.stub create: stripe_charge
-    Registration.stub create: registration
+    registration.stub save: true
+    Registration.stub new: registration
     UserMailer.stub registration_confirmation: stub("Mail", deliver: nil)
   end
 
-  it "should create a Stripe Charge" do
-    Stripe::Charge.
-      should_receive(:create).
-      with(amount: '30000',
-           currency: 'usd',
-           card: 'abc123',
-           description: 'Paul Funktower: Generating Energy Flow,The Essence of All Tai Chi Chuan').
-      and_return stripe_charge
+  context "when the Registration info is valid" do
+    it "should create a Stripe Charge" do
+      Stripe::Charge.
+        should_receive(:create).
+        with(amount: '30000',
+             currency: 'usd',
+             card: 'abc123',
+             description: 'Paul Funktower: Generating Energy Flow,The Essence of All Tai Chi Chuan').
+        and_return stripe_charge
 
-    post '/finalize', params
-  end
+      post '/finalize', params
+    end
 
-  it "should create a Registration" do
-    Registration.unstub :create
+    context "and the Stripe charge is successful" do
+      it "should create a Registration" do
+        Registration.unstub :new
 
-    post '/finalize', params
+        post '/finalize', params
 
-    Registration.count.should == 1
-    Registration.first.tap do |reg|
-      reg.name.should == "Paul Funktower"
-      reg.email.should == "pfunk@example.com"
-      reg.phone.should == "(555) 123-1234"
-      reg.amount_paid.should == 30000
-      reg.stripe_fee.should == 900
-      reg.stripe_charge_id.should == 'jb007'
-      reg.courses.should == ['Generating Energy Flow', 'The Essence of All Tai Chi Chuan']
-      reg.event.should == '2012 Tai Chi Chuan Festival'
+        Registration.count.should == 1
+        Registration.first.tap do |reg|
+          reg.name.should == "Paul Funktower"
+          reg.email.should == "pfunk@example.com"
+          reg.phone.should == "(555) 123-1234"
+          reg.amount_paid.should == 30000
+          reg.stripe_fee.should == 900
+          reg.stripe_charge_id.should == 'jb007'
+          reg.courses.should == ['Generating Energy Flow', 'The Essence of All Tai Chi Chuan']
+          reg.event.should == '2012 Tai Chi Chuan Festival'
+        end
+      end
+
+      context "and the Registration is saved successfully" do
+        it "should send the registrant a confirmation email if the Registration succeeds" do
+          UserMailer.
+            should_receive(:registration_confirmation).
+            with(registration).and_return mailer = stub("Mail")
+          mailer.
+            should_receive(:deliver)
+
+          post '/finalize', params
+        end
+      end
+
+      context "but saving the Registration fails" do
+        before :each do
+          registration.stub save: false
+        end
+
+        it "should not email the registrant" do
+          UserMailer.should_not_receive(:registration_confirmation)
+          post '/finalize', params
+        end
+      end
+    end
+
+    context "but the Stripe charge fails" do
+      before :each do
+        Stripe::Charge.
+          stub(:create).
+          and_raise Stripe::CardError.new("Your card number is incorrect", "", "card_declined")
+      end
+
+      it "should not save the Registration" do
+        registration.should_not_receive(:save)
+        post '/finalize', params
+      end
     end
   end
 
-  #TODO success vs. failure part
-  it "should send the registrant a confirmation email if the Registration succeeds" do
-    UserMailer.
-      should_receive(:registration_confirmation).
-      with(registration).and_return mailer = stub("Mail")
-    mailer.
-      should_receive(:deliver)
+  context "when the Registration info is invalid" do
+    before :each do
+      registration.stub valid?: false
+    end
 
-    post '/finalize', params
+    it "should not create a Stripe charge" do
+      Stripe::Charge.should_not_receive(:create)
+      post '/finalize', params
+    end
+
+    it "should not save the registration" do
+      registration.should_not_receive(:save)
+      post '/finalize', params
+    end
   end
 end
 
 describe PriceCalculator do
-  include Rack::Test::Methods
   let(:app) { Sinatra::Application }
   let(:courses) {
     { energy_flow: 'Generating Energy Flow',

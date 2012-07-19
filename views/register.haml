@@ -1,22 +1,23 @@
 %div
-  %p.error{ style: "display: none;" }
-  %p You are registering for the following courses:
-  %ul
-    - courses.each do |course|
-      %li= course
-
-  %p
-    Your total cost (including discounts) is:
-    = display_money total
-
-
   %form{ action: "/finalize", method: "post", id: "payment_form" }
-    %input{ type: "hidden", name: "registration[amount_paid]", value: total }
-    %input{ type: "hidden", name: "courses", value: courses.join(',') }
+    %p#token_error.error
+    - unless errors.blank?
+      %p.error= errors
+    %p You are registering for the following courses:
+    %ul
+      - registration.courses.each do |course|
+        %li= course
+
+    %p
+      Your total cost (including discounts) is:
+      = display_money registration.amount_paid
+
+    %input{ type: "hidden", name: "registration[amount_paid]", value: registration.amount_paid }
+    %input{ type: "hidden", name: "courses", value: registration.courses.join(',') }
     %fieldset
       %legend Credit Card Info
       %p
-        %label{ for: "card_number" } Credit Card Number
+        %label{ for: "card_number" } Credit Card Number*
         %input{ type: "text", size: "20", autocomplete: "off", id: "card_number" }
 
       %p
@@ -24,7 +25,7 @@
         %input{ type: "text", size: "4", autocomplete: "off", id: "card_cvc" }
 
       %p
-        %label{ for: "card_expiry_month" }
+        %label{ for: "card_expiry_month" } Card Expiration Month*
         %select#card_expiry_month
           %option{ value: "01" } 01 - January
           %option{ value: "02" } 02 - February
@@ -40,7 +41,7 @@
           %option{ value: "12" } 12 - December
 
       %p
-        %label{ for: "card_expiry_year" }
+        %label{ for: "card_expiry_year" } Card Expiration Year*
         %select#card_expiry_year
           - (2012..2030).each do |year|
             %option{ value: year }= year
@@ -49,16 +50,16 @@
       %legend Registration Info
 
       %p
-        %label{ for: "name" } Name
-        %input{ type: "text", size: "25", name: "registration[name]", id: "registration_name" }
+        %label{ for: "name" } Name*
+        %input{ type: "text", size: "25", name: "registration[name]", id: "registration_name", value: registration.name }
 
       %p
-        %label{ for: "email" } Email
-        %input{ type: "text", size: "25", name: "registration[email]", id: "registration_email" }
+        %label{ for: "email" } Email*
+        %input{ type: "text", size: "25", name: "registration[email]", id: "registration_email", value: registration.email }
 
       %p
         %label{ for: "phone" } Phone
-        %input{ type: "text", size: "20", name: "registration[phone]", id: "registration_phone" }
+        %input{ type: "text", size: "20", name: "registration[phone]", id: "registration_phone", value: registration.phone }
 
     %p
       %input{ type: "submit", value: "Pay and Finalize Registration", id: "submit_button" }

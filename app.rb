@@ -36,42 +36,58 @@ helpers do
 end
 
 get "/courses" do
-  haml :courses, locals: {error: ""}
+  haml :courses, locals: {errors: ""}
 end
 
 post "/register" do
   courses = params[:courses]
 
   if courses.blank?
-    haml :courses, locals: {error: "Please select the courses you wish to register for"}
+    haml :courses, locals: {errors: "Please select the courses you wish to register for"}
   else
-    haml :register, locals: {courses: courses, total: PriceCalculator.new(courses).total}
+    registration =
+      Registration.new(courses: courses,
+                       amount_paid: PriceCalculator.new(courses).total)
+    haml :register, locals: {errors: "", registration: registration}
   end
 end
 
 #TODO change from /finalize to /confirmation ?
 post "/finalize" do
-  charge =
-    Stripe::Charge.
-      create(amount: params[:registration][:amount_paid],
-             currency: "usd",
-             card: params[:stripeToken],
-             description: "#{params[:registration][:name]}: #{params[:courses]}")
-
   @registration =
     Registration.
-      create( params[:registration].
-                merge({courses: params[:courses].split(','),
-                       amount_paid: charge.amount,
-                       stripe_charge_id: charge.id,
-                       stripe_fee: charge.fee,
-                       event: "2012 Tai Chi Chuan Festival"}) )
+      new( params[:registration].
+             merge({courses: params[:courses].split(','),
+                    event: "2012 Tai Chi Chuan Festival"}) )
 
-  UserMailer.
-    registration_confirmation(@registration).
-    deliver
+  if @registration.valid?
+    begin
+      charge =
+        Stripe::Charge.
+          create(amount: params[:registration][:amount_paid],
+                 currency: "usd",
+                 card: params[:stripeToken],
+                 description: "#{params[:registration][:name]}: #{params[:courses]}")
 
-  haml :confirmation, locals: {registration: @registration}
+      @registration.amount_paid = charge.amount
+      @registration.stripe_charge_id = charge.id
+      @registration.stripe_fee = charge.fee
+    rescue Stripe::StripeError => e
+      return haml(:register, locals: {registration: @registration, errors: e.message})
+    end
+  else
+    return haml(:register, locals: {registration: @registration, errors: @registration.errors.full_messages.uniq.join("<br \>") })
+  end
+
+  if @registration.save
+    UserMailer.
+      registration_confirmation(@registration).
+      deliver
+
+    haml :confirmation, locals: {registration: @registration, errors: ''}
+  else
+    haml :register, locals: {registration: @registration, errors: @registration.errors.full_messages.uniq.join("<br \>") }
+  end
 end
 
 
@@ -106,6 +122,8 @@ class Registration
   index({courses: 1})
   index({stripe_charge_id: 1})
 
+  validates_presence_of :name, :email, :courses, :event
+
 end
 
 class MoneyFormatter
@@ -117,6 +135,7 @@ end
 class PriceCalculator
   attr_reader :courses, :tcc, :ck
 
+  #TODO change to CK_COURSE_LIST and TCC_COURSE_LIST (no need for OpenStruct, #ck_course_list, and #tcc_course_list)
   COURSE_LIST = [OpenStruct.new(name: "Generating Energy Flow", art: "chi kung"),
                  OpenStruct.new(name: "Cosmic Shower", art: "chi kung"),
                  OpenStruct.new(name: "Abdominal Breathing", art: "chi kung"),

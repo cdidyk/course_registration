@@ -1,6 +1,6 @@
 %div
-  - unless error.blank?
-    %p.error= error
+  - unless errors.blank?
+    %p.error= errors
   %p Choose your courses below
 
   %form{ action: "/register", method: "post" }
