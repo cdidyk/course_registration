@@ -6,11 +6,11 @@
     %p You are registering for the following courses:
     %ul
       - registration.courses.each do |course|
-        %li= course
+        %li&= course
 
-    %p
+    %pn
       Your total cost (including discounts) is:
-      = display_money registration.amount_paid
+      &= display_money registration.amount_paid
 
     %input{ type: "hidden", name: "registration[amount_paid]", value: registration.amount_paid }
     %input{ type: "hidden", name: "courses", value: registration.courses.join(',') }

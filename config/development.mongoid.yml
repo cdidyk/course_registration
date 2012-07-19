@@ -1,0 +1,8 @@
+development:
+  sessions:
+    default:
+      database: course_reg_development
+      hosts:
+        - localhost:27017
+  options:
+    allow_dynamic_fields: false

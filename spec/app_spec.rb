@@ -6,7 +6,15 @@ require 'database_cleaner'
 set :environment, :test
 
 configure :test do
-  Mongoid.load! File.join(File.dirname(__FILE__), '..', 'config/mongoid.yml')
+  Mongoid.load! File.join(File.dirname(__FILE__), "..", "config/test.mongoid.yml")
+  Mongoid.logger.level = Logger::DEBUG
+
+  ActionMailer::Base.delivery_method = :file
+  ActionMailer::Base.logger = Logger.new(STDOUT)
+  ActionMailer::Base.perform_deliveries = true
+  ActionMailer::Base.raise_delivery_errors = true
+  ActionMailer::Base.view_paths = File.join Sinatra::Application.root, 'views'
+
 
   RSpec.configure do |config|
     config.mock_with :rspec

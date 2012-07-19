@@ -7,24 +7,23 @@ require 'mongoid'
 
 require 'sinatra/reloader' if development?
 
+configure :development do
+  Mongoid.load! File.join(File.dirname(__FILE__), "config/development.mongoid.yml")
+  Mongoid.logger.level = Logger::DEBUG
 
-configure do
-  Mongoid.load! File.join(File.dirname(__FILE__), "config/mongoid.yml")
+  Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['private_key']
 
-  if production?
-    # intentionally blank...for now
-  else
-    Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['private_key']
-
-    ActionMailer::Base.delivery_method = :file
-    ActionMailer::Base.logger = Logger.new(STDOUT)
-    ActionMailer::Base.perform_deliveries = true
-    ActionMailer::Base.raise_delivery_errors = true
-    ActionMailer::Base.view_paths = File.join Sinatra::Application.root, 'views'
-
-    Mongoid.logger.level = Logger::DEBUG
-  end
+  ActionMailer::Base.delivery_method = :file
+  ActionMailer::Base.logger = Logger.new(STDOUT)
+  ActionMailer::Base.perform_deliveries = true
+  ActionMailer::Base.raise_delivery_errors = true
+  ActionMailer::Base.view_paths = File.join Sinatra::Application.root, 'views'
 end
+
+configure :production do
+  # intentionally blank...for now
+end
+
 
 helpers do
   include Rack::Utils

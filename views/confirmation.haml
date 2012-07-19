@@ -8,21 +8,21 @@
   %ul
     %li
       Name:
-      = registration.name
+      &= registration.name
     %li
       Email:
-      = registration.email
+      &= registration.email
     %li
       Phone:
-      = registration.phone
+      &= registration.phone
 
   %h4 Courses
   %ul
     - registration.courses.each do |course|
-      %li= course
+      %li&= course
 
   %h4 Amount Charged
-  %p= display_money(registration.amount_paid)
+  %p&= display_money(registration.amount_paid)
 
   %div
     %p
