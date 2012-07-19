@@ -17,7 +17,8 @@ $(document).ready(function() {
     stripeResponseHandler = function(status, response) {
         if (response.error) {
             // show the errors on the form
-            $(".payment-errors").text(response.error.message);
+            $(".error").text(response.error.message);
+            $(".error").show();
             $("#submit_button").removeAttr("disabled");
         } else {
             var form$ = $("#payment_form");
