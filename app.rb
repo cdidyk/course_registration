@@ -43,7 +43,7 @@ post "/register" do
   courses = params[:courses]
 
   if courses.blank?
-    haml :courses, locals: {errors: "Please select the courses you wish to register for"}
+    haml :courses, locals: {errors: "Please check the boxes by the courses you wish to register for"}
   else
     registration =
       Registration.new(courses: courses,

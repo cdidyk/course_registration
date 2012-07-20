@@ -2,7 +2,6 @@
   %h2.page-description.align-center
     Course Registration
 
-
   - unless errors.blank?
     %p.error= errors
 
@@ -22,8 +21,7 @@
             %li
               %p
                 %input{ type: "checkbox", name: "courses[]", id: "generating_energy_flow", value: "Generating Energy Flow" }
-                %label{ for: "generating_energy_flow" } <strong>$300.00</strong> <em>See below for package discounts</em>
-
+                %label{ for: "generating_energy_flow" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
           %p <strong>*Prerequisite for those who are learning from Shaolin Wahnam for the first time.</strong>
           %p This is both the most basic and most valuable course Sifu Wong teaches. If you have questions about whether chi is real or what chi flow is, they will be answered in the first five minutes through direct experience! And then Sifu Wong will teach you the valuable skills necessary to generate a chi flow yourself, so you can practice 15 minutes a day on your own to become healthier, happier, and more full of energy in your daily life than you can imagine. It truly has to be experienced to be believed.
@@ -44,7 +42,7 @@
             %li
               %p
                 %input{ type: "checkbox", name: "courses[]", id: "all_tcc", value: "The Essence of All Tai Chi Chuan" }
-                %label{ for: "all_tcc" } <strong>$500.00</strong> <em>See below for package discounts</em>
+                %label{ for: "all_tcc" } <strong>$500.00</strong> <em>Click here to register</em>
 
         .description
           %p <strong>*Prerequiste for anyone new to Shaolin Wahnam Chi Kung and Tai Chi Chuan.</strong>
@@ -67,7 +65,7 @@
             %li
               %p
                 %input{ type: "checkbox", name: "courses[]", id: "cosmic_shower", value: "Cosmic Shower" }
-                %label{ for: "cosmic_shower" } <strong>$300.00</strong> <em>See below for package discounts</em>
+                %label{ for: "cosmic_shower" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
           %p Learn to utilize your Chi Kung Exercises to generate a Cosmic Shower of cleansing energy to purify your mind, body and spirit.  Sifu Wong will directly transmit this precious and powerful skill during this course so you walk away with this incredible skill at your disposal.
 
@@ -88,7 +86,7 @@
             %li
               %p
                 %input{ type: "checkbox", name: "courses[]", id: "yang", value: "The Essence of Yang-style Tai Chi Chuan" }
-                %label{ for: "yang" } <strong>$500.00</strong> <em>See below for package discounts</em>
+                %label{ for: "yang" } <strong>$500.00</strong> <em>Click here to register</em>
         .description
           %p Yang Style Tai Chi Chuan is the most popular style of Tai Chi Chuan practiced today. Indeed, it is so popular that to many people, Tai Chi Chuan means Yang Style Tai Chi Chuan, though Chen Style Tai Chi Chuan is also becoming popular today.
 
@@ -111,7 +109,7 @@
             %li
               %p
                 %input{ type: "checkbox", name: "courses[]", id: "abdominal", value: "Abdominal Breathing" }
-                %label{ for: "abdominal" } <strong>$300.00</strong> <em>See below for package discounts</em>
+                %label{ for: "abdominal" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
           %p In Abdominal Breathing, energy (not air) flows in from the Cosmos down from the nose to the abdominal energy field along the Ren or Conceptual Meridian, and up from the abdominal energy field along the Ren Meridian out of the mouth back to the Cosmos.
 
@@ -130,7 +128,7 @@
             %li
               %p
                 %input{ type: "checkbox", name: "courses[]", id: "chen", value: "The Essence of Chen-style Tai Chi Chuan" }
-                %label{ for: "chen" } <strong>$500.00</strong> <em>See below for package discounts</em>
+                %label{ for: "chen" } <strong>$500.00</strong> <em>Click here to register</em>
         .description
           %p This set, which is probably closer in spirit and form to the original Taijiquan practiced by past masters like Zhang San Feng and Chen Wang Ting than many Taijiquan sets practiced today, enables us to attain good health, combat efficiency and spiritual fulfillment.
           %p Chen style Tai Chi Chuan is often seen as the faster type of Tai Chi Chuan as a swifter flow of qi is emphasized.  Sifu Wong hopes practitioners of all styles will come and enjoy this variation of applying the skills he will be teaching throughout the courses to a beautiful set created by the Grandmaster himself.
@@ -151,7 +149,7 @@
             %li
               %p
                 %input{ type: "checkbox", name: "courses[]", id: "merging", value: "Merging with the Cosmos" }
-                %label{ for: "merging" } <strong>$300.00</strong> <em>See below for package discounts</em>
+                %label{ for: "merging" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
           %p Sinew Metamorphosis is such a powerful exercise in our school that it is understandable that many people think we are exagerrating when we say by just flicking the fingers three times we can generate tremendous internal force or expand our spirit to merge with the cosmos!
           %p While these exercises are deceptively simple to perform the skill of megring with the cosmos that is transmitted by Sifu Wong during these exercises is of the highest level.
@@ -170,7 +168,7 @@
             %li
               %p
                 %input{ type: "checkbox", name: "courses[]", id: "wudang", value: "The Essence of Wudang Tai Chi Chuan" }
-                %label{ for: "wudang" } <strong>$500.00</strong> <em>See below for package discounts</em>
+                %label{ for: "wudang" } <strong>$500.00</strong> <em>Click here to register</em>
         .description
           %p In response to numerous requests, Grandmaster Wong has re-constructed from classical sources this set of Wudang Taijiquan, the original style of Tai Chi Chuan as taught by the patriarch of Tai Chi Chuan Zhang San Feng.
           %p <a href="http://www.shaolin.org/general-2/kungfu-sets/wudang-taijiquan.html">Click here</a> to read about some of the history and philosophy of the Wudang style.
@@ -180,7 +178,7 @@
 
     %hr
 
-    %h2.align-center Pricing
+    %h2.align-center <a name="pricing"></a>Pricing
 
     %table.pricing
       %tbody
