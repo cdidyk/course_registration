@@ -15,8 +15,10 @@
           %strong&= display_money registration.amount_paid
 
     %p#token_error.error
+    %noscript.error{ style: "margin-bottom: 10px;" } Javascript is not enabled and is required for this form to work properly. Please enable it in your web browser settings.
     - unless errors.blank?
-      %p.error= errors
+      %p.error
+        = errors
 
     .one-third
       %h3 Registration Info

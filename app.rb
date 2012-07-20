@@ -76,7 +76,7 @@ post "/finalize" do
       return haml(:register, locals: {registration: @registration, errors: e.message})
     end
   else
-    return haml(:register, locals: {registration: @registration, errors: @registration.errors.full_messages.uniq.join("<br \>") })
+    return haml(:register, locals: {registration: @registration, errors: @registration.errors.full_messages.uniq.join(", ") })
   end
 
   if @registration.save
@@ -86,7 +86,7 @@ post "/finalize" do
 
     haml :confirmation, locals: {registration: @registration}
   else
-    haml :register, locals: {registration: @registration, errors: @registration.errors.full_messages.uniq.join("<br \>") }
+    haml :register, locals: {registration: @registration, errors: @registration.errors.full_messages.uniq.join(", ") }
   end
 end
 

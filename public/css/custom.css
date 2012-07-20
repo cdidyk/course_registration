@@ -78,6 +78,10 @@ ul.confirmation li {
     margin-left: 0;
 }
 
+#token_error {
+    display: none;
+}
+
 dl dt {
     font-weight: bold;
 }

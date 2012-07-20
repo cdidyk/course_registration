@@ -2,8 +2,6 @@
 jQuery('html').removeClass('no-js').addClass('js');
 
 $(document).ready(function() {
-    $("#token_error").hide();
-
     $("#payment_form").submit(function(event) {
         // disable the submit button to prevent repeated clicks
         $('#submit_button').attr("disabled", "disabled");
