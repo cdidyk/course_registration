@@ -16,18 +16,6 @@ section a:hover, section a > *:hover {
     font-weight: 800;
 }
 
-.slides-container {
-    background-color: #6FC4BD;
-}
-
-.ss-slider .pagination-container a {
-    background-color: rgba(184, 5, 3, 0.6);
-}
-
-.ss-slider .pagination-container a:hover, .ss-slider.hide-content:hover .pagination-container a:hover {
-    background-color: rgba(184, 5, 3, 1);
-}
-
 body {
     color: #474747;
     font: 13px/1.5 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
@@ -40,6 +28,31 @@ section h1, section h2, section h3, section h4, section h5, section h6, .page-ti
 
 .accented {
     color: #b80508;
+}
+
+.course-offering img {
+    float: left;
+    margin-right: 1em;
+}
+
+.course-offering .details {
+
+}
+
+.course-offering .description {
+    clear: left;
+}
+
+.course-offering label {
+    display: inline;
+}
+
+input[type="checkbox"] {
+    display: inline;
+}
+
+hr {
+    clear: both;
 }
 
 dl dt {

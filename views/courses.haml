@@ -1,48 +1,186 @@
-%div
+%section#content.container.clearfix
+  %h2.page-description.align-center
+    Course Registration
+
+
   - unless errors.blank?
     %p.error= errors
-  %p Choose your courses below
 
   %form{ action: "/register", method: "post" }
-    %p
-      %input{ type: "checkbox", name: "courses[]", id: "generating_energy_flow", value: "Generating Energy Flow" }
-      %label{ for: "generating_energy_flow" }
-        %strong Generating Energy Flow*
 
-    %p
-      %input{ type: "checkbox", name: "courses[]", id: "all_tcc", value: "The Essence of All Tai Chi Chuan" }
-      %label{ for: "all_tcc" }
-        %strong The Essence of All Tai Chi Chuan*
+    .one-half
+      %h3 <strong>Generating Energy Flow*</strong>
 
-    %p
-      %input{ type: "checkbox", name: "courses[]", id: "cosmic_shower", value: "Cosmic Shower" }
-      %label{ for: "cosmic_shower" }
-        %strong Cosmic Shower
+      .course-offering
+        %img{ src: "/site_img/group_lifting_the_sky.jpeg", alt: "A group of students performing the Chi Kung exercise 'Lifting the Sky'" }
+        .details
+          %ul.none
+            %li
+              %h4.accented <strong>Friday, November 2nd, 2012</strong>
+            %li
+              %h4.accented 9am to 12pm
+            %li
+              %p
+                %input{ type: "checkbox", name: "courses[]", id: "generating_energy_flow", value: "Generating Energy Flow" }
+                %label{ for: "generating_energy_flow" } <strong>$300.00</strong> <em>See below for package discounts</em>
 
-    %p
-      %input{ type: "checkbox", name: "courses[]", id: "yang", value: "The Essence of Yang-style Tai Chi Chuan" }
-      %label{ for: "yang" }
-        %strong The Essence of Yang-style Tai Chi Chuan
+        .description
+          %p Prerequisite for those who are learning from Shaolin Wahnam for the first time or skill deepening and powerful refresher for those who wish to retake.
 
-    %p
-      %input{ type: "checkbox", name: "courses[]", id: "abdominal", value: "Abdominal Breathing" }
-      %label{ for: "abdominal" }
-        %strong Abdominal Breathing
+          %p Generating Energy Flow showcases the first three exercises from the 18 Lohan Hands, a legendary set of exercises for restoring health, vitality, mental clarity and longevity.
 
-    %p
-      %input{ type: "checkbox", name: "courses[]", id: "chen", value: "The Essence of Chen-style Tai Chi Chuan" }
-      %label{ for: "chen" }
-        %strong The Essence of Chen-style Tai Chi Chuan
+          %p Lifting the Sky, Carrying the Moon and Pushing Mountains are all you need to have a wildly successful Chi Kung practice.  Learn to use these exercises to generate an energy flow and enjoy standing zen meditation at the end of each exercise.
 
-    %p
-      %input{ type: "checkbox", name: "courses[]", id: "merging", value: "Merging with the Cosmos" }
-      %label{ for: "merging" }
-        %strong Merging with the Cosmos
+    .one-half.last
+      %h3 <strong>The Essence of Tai Chi Chuan*</strong>
 
-    %p
-      %input{ type: "checkbox", name: "courses[]", id: "wudang", value: "The Essence of Wudang Tai Chi Chuan" }
-      %label{ for: "wudang" }
-        %strong The Essence of Wudang Tai Chi Chuan
+      .course-offering
+        %img{ src: "/site_img/kick_defense.jpeg", alt: "Sifu Wong uses the Tai Chi Chuan pattern 'White Crane Spreads Wings' to defend a kick" }
+        .details
+          %ul.none
+            %li
+              %h4.accented <strong>Friday, November 2nd, 2012</strong>
+            %li
+              %h4.accented 2pm to 7pm
+            %li
+              %p
+                %input{ type: "checkbox", name: "courses[]", id: "all_tcc", value: "The Essence of All Tai Chi Chuan" }
+                %label{ for: "all_tcc" } <strong>$500.00</strong> <em>See below for package discounts</em>
 
-    %p
+        .description
+          %p Prerequiste for anyone new to Shaolin Wahnam Chi Kung and Tai Chi Chuan. The most important course of the series for anyone serious about beginning their Tai Chi Chuan training as well as you 30 year veterans out there!
+
+          %p Learn the foundational and most important skills of all Tai Chi Chuan styles.  Stance Training with proper stance and skill of relaxing in your stance to build internal force.  Flowing through your stances, combat application and zen meditation.
+
+          %p <a href="http://shaolin.org/general-2/kungfu-sets/24-pattern.html">Click here</a> to read about the 24-Pattern Simplified Set and watch videos of the set performed by members of Shaolin Wahnam
+
+    %hr
+
+    .one-half
+      %h3 <strong>Cosmic Shower</strong>
+      .course-offering
+        %img{ src: "/site_img/cosmic_shower.jpeg", alt: "Sifu Wong enjoying a cosmic shower" }
+        .details
+          %ul.none
+            %li
+              %h4.accented <strong>Saturday, November 3rd, 2012</strong>
+            %li
+              %h4.accented 9am to 12pm
+            %li
+              %p
+                %input{ type: "checkbox", name: "courses[]", id: "cosmic_shower", value: "Cosmic Shower" }
+                %label{ for: "cosmic_shower" } <strong>$300.00</strong> <em>See below for package discounts</em>
+        .description
+          %p Learn to utilize your Chi Kung Exercises to generate a Cosmic Shower of cleansing energy to purify your mind, body and spirit.  Sifu Wong will directly transmit this precious and powerful skill during this course so you walk away with this incredible skill at your disposal.
+
+          %p Cultivating the spirit, which is non-religious, is an important aspect of Wahnam training and involves emotional, mental as well as spiritual purification.  At the lowest level, spiritual cultivation enables us to be happy, peaceful and free of stress, while at the highest level it enables us to return to God, or by whatever name we call the Supreme Reality.
+
+          %p <a href="http://www.shaolin.org/general/videos-chi-kung.html">Click here</a> to visit the Shaolin Wahnam Chi Kung Video clips page and read more about cosmic shower as well as see vidoes of a Cosmic Shower course with Sifu Wong Kiew Kit!!
+
+    .one-half.last
+      %h3 <strong>108-Pattern Yang style Tai Chi Chuan</strong>
+      .course-offering
+        %img{ src: "/site_img/single_whip.jpeg", alt: "Sifu Wong demonstrates the Tai Chi Chuan pattern 'Single Whip Saves Emperor'" }
+        .details
+          %ul.none
+            %li
+              %h4.accented <strong>Saturday, November 3rd, 2012</strong>
+            %li
+              %h4.accented 2pm to 7pm
+            %li
+              %p
+                %input{ type: "checkbox", name: "courses[]", id: "yang", value: "The Essence of Yang-style Tai Chi Chuan" }
+                %label{ for: "yang" } <strong>$500.00</strong> <em>See below for package discounts</em>
+        .description
+          %p Yang Style Tai Chi Chuan is the most popular style of Tai Chi Chuan practiced today. Indeed, it is so popular that to many people, Tai Chi Chuan means Yang Style Tai Chi Chuan, though Chen Style Tai Chi Chuan is also becoming popular today.
+
+          %p Practitioners in China and other parts of the world often practice this set as a graceful exercise without internal force, and in solo without its combat application. But in our school, internal force training and combat application are essential aspects of this set and are taught at the courses.
+
+          %p <a href="http://shaolin.org/video-clips-8/taijiquan/108-pattern.html">Click here</a> to visit Sifu Wong's page on the 108-Pattern Yang style set and watch video clips to learn this set.  Then come to our course and experience Sifu Wong's direct transmission of the skills which make this set truly come alive!
+
+    %hr
+
+    .one-half
+      %h3 <strong>Abdominal Breathing</strong>
+      .course-offering
+        %img{ src: "/site_img/cosmos_stance.jpeg", alt: "Sifu Wong builds tremendous internal force in the cosmos stance" }
+        .details
+          %ul.none
+            %li
+              %h4.accented <strong>Sunday, November 4th, 2012</strong>
+            %li
+              %h4.accented 9am to 12pm
+            %li
+              %p
+                %input{ type: "checkbox", name: "courses[]", id: "abdominal", value: "Abdominal Breathing" }
+                %label{ for: "abdominal" } <strong>$300.00</strong> <em>See below for package discounts</em>
+        .description
+          %p In Abdominal Breathing, energy (not air) flows in from the Cosmos down from the nose to the abdominal energy field along the Ren or Conceptual Meridian, and up from the abdominal energy field along the Ren Meridian out of the mouth back to the Cosmos.
+
+          %p This technique is used to generate tremendous breath control and a deep zen state of mind to help the practitioner reach a powerful meditative state where she can reach satori and experience the beauty of the cosmos.
+
+    .one-half.last
+      %h3 <strong>Flowing Water, Flowing Clouds<br />(Chen style Tai Chi Chuan)</strong>
+      .course-offering
+        %img{ src: "/site_img/low_single_whip.jpeg", alt: "A Tai Chi Chuan practitioner defends a kick with the pattern 'Low Single Whip'" }
+        .details
+          %ul.none
+            %li
+              %h4.accented <strong>Sunday, November 4th, 2012</strong>
+            %li
+              %h4.accented 2pm to 7pm
+            %li
+              %p
+                %input{ type: "checkbox", name: "courses[]", id: "chen", value: "The Essence of Chen-style Tai Chi Chuan" }
+                %label{ for: "chen" } <strong>$500.00</strong> <em>See below for package discounts</em>
+        .description
+          %p This set, which is probably closer in spirit and form to the original Taijiquan practiced by past masters like Zhang San Feng and Chen Wang Ting than many Taijiquan sets practiced today, enables us to attain good health, combat efficiency and spiritual fulfillment.
+          %p Chen style Tai Chi Chuan is often seen as the faster type of Tai Chi Chuan as a swifter flow of qi is emphasized.  Sifu Wong hopes practitioners of all styles will come and enjoy this variation of applying the skills he will be teaching throughout the courses to a beautiful set created by the Grandmaster himself.
+          %p <a href="http://www.shaolin.org/taijiquan/flowing-water/flowing-water04.html">Click here</a> to see Sifu Wong performing this set.
+
+    %hr
+
+    .one-half
+      %h3 <strong>Merging with the Cosmos</strong>
+      .course-offering
+        %img{ src: "/site_img/sinew_metamorphosis.jpeg", alt: "A group of students performing a Chi Kung exercise from Sinew Metamorphosis" }
+        .details
+          %ul.none
+            %li
+              %h4.accented <strong>Monday, November 5th, 2012</strong>
+            %li
+              %h4.accented 9am to 12pm
+            %li
+              %p
+                %input{ type: "checkbox", name: "courses[]", id: "merging", value: "Merging with the Cosmos" }
+                %label{ for: "merging" } <strong>$300.00</strong> <em>See below for package discounts</em>
+        .description
+          %p Sinew Metamorphosis is such a powerful exercise in our school that it is understandable that many people think we are exagerrating when we say by just flicking the fingers three times we can generate tremendous internal force or expand our spirit to merge with the cosmos!
+          %p While these exercises are deceptively simple to perform the skill of megring with the cosmos that is transmitted by Sifu Wong during these exercises is of the highest level.
+          %p This course will leave you completely amazed at the depth and power of the highest level Chi Kung skills.
+
+    .one-half.last
+      %h3 <strong>Wudang Tai Chi Chuan</strong>
+      .course-offering
+        %img{ src: "/site_img/golden_eagle_spreads_wings.jpeg", alt: "Sifu Wong demonstrates the Wudang Tai Chi Chuan pattern 'Golden Eagle Spreads Wings'" }
+        .details
+          %ul.none
+            %li
+              %h4.accented <strong>Monday, November 5th, 2012</strong>
+            %li
+              %h4.accented 2pm to 7pm
+            %li
+              %p
+                %input{ type: "checkbox", name: "courses[]", id: "wudang", value: "The Essence of Wudang Tai Chi Chuan" }
+                %label{ for: "wudang" } <strong>$500.00</strong> <em>See below for package discounts</em>
+        .description
+          %p In response to numerous requests, Grandmaster Wong has re-constructed from classical sources this set of Wudang Taijiquan, the original style of Tai Chi Chuan as taught by the patriarch of Tai Chi Chuan Zhang San Feng.
+          %p <a href="http://www.shaolin.org/general-2/kungfu-sets/wudang-taijiquan.html">Click here</a> to read about some of the history and philosophy of the Wudang style.
+          %p <a href="http://www.shaolin.org/video-clips-7/wudang-taijiquan/treatise/treatise01.html">Click here</a> to view the TAIJIQUAN TREATISE OF ZHANG SAN FENG!
+          %p <a href="http://www.shaolin.org/video-clips-7/wudang-taijiquan/set-videos.html">Click Here</a> to view the picture and video series of Sifu Wong's tremendous Wudang Taichichuan set.  The set is performed slowly here to enable students to learn it more easily. Do not worry about force while learning the set. Just get the routine correct. At the course the Form-Flow-Force method will be taught to perform the set with flowing chi and internal force.
+          %p The Wudang Taijiquan we practice in our school contains all the important features for which Taijiquan is famous, like graceful, flowing movements, use of mind and internal force instead of physical strength, attaining good health, vitality and longevity, combat efficiency irrespective of size, age and gender, and spiritual cultivation irrespective of religion.
+
+    %hr
+
+    %p.align-center
       %input{ type: "submit", value: "Register" }

@@ -24,6 +24,7 @@ configure :production do
   # intentionally blank...for now
 end
 
+set :haml, format: :html5
 
 helpers do
   include Rack::Utils
