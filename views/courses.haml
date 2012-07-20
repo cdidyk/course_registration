@@ -5,6 +5,13 @@
   - unless errors.blank?
     %p.error= errors
 
+  %hr
+
+  :markdown
+    **Please Note:** Tai Chi Chuan course attendees who don't already know the respective sets should learn them from the video links as best they can before the Festival. Sifu Wong will review and correct the sets during the courses, but this will only be a portion of each course, as there are other important aspects of each set/style that he will also teach.
+
+  %hr
+
   %form{ action: "/register", method: "post" }
 
     .one-half
@@ -23,13 +30,17 @@
                 %input{ type: "checkbox", name: "courses[]", id: "generating_energy_flow", value: "Generating Energy Flow" }
                 %label{ for: "generating_energy_flow" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
-          %p <strong>*Prerequisite for those who are learning from Shaolin Wahnam for the first time.</strong>
-          %p This is both the most basic and most valuable course Sifu Wong teaches. If you have questions about whether chi is real or what chi flow is, they will be answered in the first five minutes through direct experience! And then Sifu Wong will teach you the valuable skills necessary to generate a chi flow yourself, so you can practice 15 minutes a day on your own to become healthier, happier, and more full of energy in your daily life than you can imagine. It truly has to be experienced to be believed.
-          %p Generating Energy Flow showcases the best three exercises from the 18 Lohan Hands, a legendary set of exercises for restoring health, vitality, mental clarity, and longevity.
-          %p Lifting the Sky, Carrying the Moon, and Pushing Mountains are all you need to have a wildly successful Chi Kung practice.  Learn to use these exercises to generate an energy flow and enjoy standing zen meditation at the end of each exercise.
+          :markdown
+            __*Prerequisite for all other Chi Kung courses (for non-Shaolin Wahnam members).__
+
+            _Generating Energy Flow is highly recommended (but not required) for non-Shaolin Wahnam members who are only interested in Tai Chi Chuan courses._
+
+            This is both the most basic and most valuable course Sifu Wong teaches. Not only will you learn what chi flow is, you'll directly experience it in the first five minutes! Beginners will learn everything they need to have a wildly successful Chi Kung practice, while experienced students will deepen the most important Chi Kung skills.
+
+            Generating Energy Flow showcases three of the best exercises in all of Chi Kung: Lifting the Sky, Pushing Mountains, and Carrying the Moon. These exercises are legendary for restoring health, vitality, mental clarity, and longevity. You will be surprised at how powerful the benefits are, but then again, a living Grandmaster will be transmitting the skills directly to you!
 
     .one-half.last
-      %h3 <strong>The Essence of Tai Chi Chuan*</strong>
+      %h3 <strong>Fundamentals of Tai Chi Chuan*</strong>
 
       .course-offering
         %img{ src: "/site_img/kick_defense.jpeg", alt: "Sifu Wong uses the Tai Chi Chuan pattern 'White Crane Spreads Wings' to defend a kick" }
@@ -37,7 +48,7 @@
           %ul.none
             %li
               %h4.accented <strong>Friday, November 2nd, 2012</strong>
-            %li
+              %li
               %h4.accented 2pm to 7pm
             %li
               %p
@@ -45,10 +56,14 @@
                 %label{ for: "all_tcc" } <strong>$500.00</strong> <em>Click here to register</em>
 
         .description
-          %p <strong>*Prerequiste for anyone new to Shaolin Wahnam Chi Kung and Tai Chi Chuan.</strong>
-          %p The most important course of the series for anyone serious about beginning their Tai Chi Chuan training as well as you 30 year veterans out there!
-          %p Learn the foundational and most important skills of all Tai Chi Chuan styles.  Stance Training with proper stance and skill of relaxing in your stance to build internal force.  Flowing through your stances, combat application and zen meditation.
-          %p <a href="http://shaolin.org/general-2/kungfu-sets/24-pattern.html">Click here</a> to read about the 24-Pattern Simplified Set and watch videos of the set performed by members of Shaolin Wahnam
+          :markdown
+            __*Prerequisite for all other Tai Chi Chuan courses (for anyone who has never learned Shaolin Kung Fu or Tai Chi Chuan from Sifu Wong or another Shaolin Wahnam Instructor)__
+
+            Don't let the name fool you -this is the most important Tai Chi Chuan course being offered, regardless of whether you are a beginner or 30 year veteran.
+
+            Learn and directly experience profound skills often described in Tai Chi Chuan classics, but rarely taught this clearly, systematically, and deeply. These skills are the core of whatever style of Tai Chi Chuan you practice (or wish to learn) and will be assumed and built upon in the other Tai Chi Chuan courses. After taking this course, you will know how to build tremendous internal force through your Tai Chi Chuan practice, as well as how to flow through patterns to maximize the incredible health and vitality benefits Tai Chi Chuan brings, all while avoiding common mistakes that lead to injuries like "Tai Chi Knee".
+
+            To better focus on learning and deepening the core Tai Chi Chuan skills, this course will focus on the 24-Pattern Simplified Set. [Click here](http://shaolin.org/general-2/kungfu-sets/24-pattern.html) to read about the 24-Pattern Simplified Set and watch videos of the set performed by members of Shaolin Wahnam.
 
     %hr
 
