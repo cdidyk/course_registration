@@ -55,17 +55,17 @@ hr {
     clear: both;
 }
 
-table.pricing {
+.pricing {
     width: 50%;
     margin: auto 25% 2em 25%;
     font-size: 120%;
 }
 
-table.pricing tr {
+.pricing tr {
     border-bottom: 1px solid;
 }
 
-table.pricing td {
+.pricing td {
     text-align: left;
     padding-top: 0.5em;
 }

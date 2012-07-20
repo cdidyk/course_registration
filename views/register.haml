@@ -1,29 +1,47 @@
-%div
+%section#content.container.clearfix
+  %h2.page-description.align-center Register & Pay
+
   %form{ action: "/finalize", method: "post", id: "payment_form" }
+    %input{ type: "hidden", name: "registration[amount_paid]", value: registration.amount_paid }
+    %input{ type: "hidden", name: "courses", value: registration.courses.join(',') }
+
+    %ul.pricing{ style: "margin-bottom: 0; border: 1px solid;" }
+      - registration.courses.each do |course|
+        %li&= course
+    %p.pricing{ style: "border: 1px solid; font-weight: bold;" }
+      Total (including discounts):
+      %span.accented
+        %strong&= display_money registration.amount_paid
+
     %p#token_error.error
     - unless errors.blank?
       %p.error= errors
-    %p You are registering for the following courses:
-    %ul
-      - registration.courses.each do |course|
-        %li&= course
 
-    %pn
-      Your total cost (including discounts) is:
-      &= display_money registration.amount_paid
+    .one-third
+      %h3 Registration Info
+      %p
+        %label{ for: "name" } Name*
+        %input{ type: "text", size: "25", name: "registration[name]", id: "registration_name", value: registration.name }
 
-    %input{ type: "hidden", name: "registration[amount_paid]", value: registration.amount_paid }
-    %input{ type: "hidden", name: "courses", value: registration.courses.join(',') }
-    %fieldset
-      %legend Credit Card Info
+      %p
+        %label{ for: "email" } Email*
+        %input{ type: "text", size: "25", name: "registration[email]", id: "registration_email", value: registration.email }
+
+      %p
+        %label{ for: "phone" } Phone
+        %input{ type: "text", size: "20", name: "registration[phone]", id: "registration_phone", value: registration.phone }
+
+    .one-third
+      %h3 Credit Card Info
       %p
         %label{ for: "card_number" } Credit Card Number*
         %input{ type: "text", size: "20", autocomplete: "off", id: "card_number" }
-
       %p
         %label{ for: "card_cvc" } CVC
         %input{ type: "text", size: "4", autocomplete: "off", id: "card_cvc" }
 
+    .one-third.last
+      %h3 &nbsp;
       %p
         %label{ for: "card_expiry_month" } Card Expiration Month*
         %select#card_expiry_month
@@ -39,27 +57,13 @@
           %option{ value: "10" } 10 - October
           %option{ value: "11" } 11 - November
           %option{ value: "12" } 12 - December
-
       %p
         %label{ for: "card_expiry_year" } Card Expiration Year*
         %select#card_expiry_year
           - (2012..2030).each do |year|
             %option{ value: year }= year
 
-    %fieldset
-      %legend Registration Info
+    %hr
 
-      %p
-        %label{ for: "name" } Name*
-        %input{ type: "text", size: "25", name: "registration[name]", id: "registration_name", value: registration.name }
-
-      %p
-        %label{ for: "email" } Email*
-        %input{ type: "text", size: "25", name: "registration[email]", id: "registration_email", value: registration.email }
-
-      %p
-        %label{ for: "phone" } Phone
-        %input{ type: "text", size: "20", name: "registration[phone]", id: "registration_phone", value: registration.phone }
-
-    %p
+    %p.align-center
       %input{ type: "submit", value: "Pay and Finalize Registration", id: "submit_button" }
