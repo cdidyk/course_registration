@@ -139,15 +139,14 @@ end
 class PriceCalculator
   attr_reader :courses, :tcc, :ck
 
-  #TODO change to CK_COURSE_LIST and TCC_COURSE_LIST (no need for OpenStruct, #ck_course_list, and #tcc_course_list)
-  COURSE_LIST = [OpenStruct.new(name: "Generating Energy Flow", art: "chi kung"),
-                 OpenStruct.new(name: "Cosmic Shower", art: "chi kung"),
-                 OpenStruct.new(name: "Abdominal Breathing", art: "chi kung"),
-                 OpenStruct.new(name: "Merging with the Cosmos", art: "chi kung"),
-                 OpenStruct.new(name: "The Essence of All Tai Chi Chuan", art: "tcc"),
-                 OpenStruct.new(name: "The Essence of Yang-style Tai Chi Chuan", art: "tcc"),
-                 OpenStruct.new(name: "The Essence of Chen-style Tai Chi Chuan", art: "tcc"),
-                 OpenStruct.new(name: "The Essence of Wudang Tai Chi Chuan", art: "tcc")]
+  CK_COURSE_LIST = ["Generating Energy Flow",
+                    "Cosmic Shower",
+                    "Abdominal Breathing",
+                    "Merging with the Cosmos"]
+  TCC_COURSE_LIST = ["Fundamentals of Tai Chi Chuan",
+                     "108-Pattern Yang style Tai Chi Chuan",
+                     "Flowing Water Floating Clouds",
+                     "Wudang Tai Chi Chuan"]
 
   # Pricing structure:
   # 1 CK course: $300
@@ -165,16 +164,8 @@ class PriceCalculator
 
   def initialize courses
     @courses = courses.uniq
-    @tcc = @courses.find_all {|c| tcc_course_list.include? c }
-    @ck = @courses.find_all {|c| ck_course_list.include? c }
-  end
-
-  def ck_course_list
-    COURSE_LIST.find_all {|c| c.art == "chi kung" }.map(&:name)
-  end
-
-  def tcc_course_list
-    COURSE_LIST.find_all {|c| c.art == "tcc" }.map(&:name)
+    @tcc = @courses.find_all {|c| TCC_COURSE_LIST.include? c }
+    @ck = @courses.find_all {|c| CK_COURSE_LIST.include? c }
   end
 
   #NOTE in cents

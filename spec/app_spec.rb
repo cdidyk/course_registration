@@ -160,10 +160,10 @@ describe PriceCalculator do
       shower: 'Cosmic Shower',
       ab: 'Abdominal Breathing',
       cosmos: 'Merging with the Cosmos',
-      tcc: 'The Essence of All Tai Chi Chuan',
-      yang: 'The Essence of Yang-style Tai Chi Chuan',
-      chen: 'The Essence of Chen-style Tai Chi Chuan',
-      wudang: 'The Essence of Wudang Tai Chi Chuan' }
+      tcc: 'Fundamentals of Tai Chi Chuan',
+      yang: '108-Pattern Yang style Tai Chi Chuan',
+      chen: 'Flowing Water Floating Clouds',
+      wudang: 'Wudang Tai Chi Chuan' }
   }
 
   describe "#total" do
