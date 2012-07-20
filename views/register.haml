@@ -5,13 +5,14 @@
     %input{ type: "hidden", name: "registration[amount_paid]", value: registration.amount_paid }
     %input{ type: "hidden", name: "courses", value: registration.courses.join(',') }
 
-    %ul.pricing{ style: "margin-bottom: 0; border: 1px solid;" }
-      - registration.courses.each do |course|
-        %li&= course
-    %p.pricing{ style: "border: 1px solid; font-weight: bold;" }
-      Total (including discounts):
-      %span.accented
-        %strong&= display_money registration.amount_paid
+    %div.pricing{ style: "border: 1px solid; padding: 5px;" }
+      %ul{ style: "margin-bottom: 0; padding-bottom: 5px; border-bottom: 1px solid;" }
+        - registration.courses.each do |course|
+          %li&= course
+      %p{ style: "font-weight: bold; margin-bottom: 0; margin-top: 5px; padding-left: 10px;" }
+        Total (including discounts):
+        %span.accented
+          %strong&= display_money registration.amount_paid
 
     %p#token_error.error
     - unless errors.blank?

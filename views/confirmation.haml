@@ -1,31 +1,33 @@
-%div
-  %h3 Thank you!
-  %p Your registration and payment have been accepted and a confirmation email/receipt will be sent to you shortly.
-  %p If you have any questions or need further help, please contact Chris Didyk at cdidyk@gmail.com or (727) 453-2490.
-  %p Enjoy the Festival!
+%section#content.container.clearfix
+  %h2.page-description.align-center Thank you!
+  %p Your registration and payment have been accepted and a confirmation email/receipt will be sent to you shortly. If you have any questions or need further help, please contact Chris Didyk at cdidyk@gmail.com or (727) 453-2490. Enjoy the Festival!
 
-  %h3 Registration Info
-  %ul
-    %li
-      Name:
-      &= registration.name
-    %li
-      Email:
-      &= registration.email
-    %li
-      Phone:
-      &= registration.phone
+  %hr
 
-  %h4 Courses
-  %ul
-    - registration.courses.each do |course|
-      %li&= course
+  .one-third
+    %h3 Registrant
+    %ul.confirmation
+      %li
+        %strong Name:
+        &= registration.name
+      %li
+        %strong Email:
+        &= registration.email
+      %li
+        %strong Phone:
+        &= registration.phone
 
-  %h4 Amount Charged
-  %p&= display_money(registration.amount_paid)
+  .one-third
+    %h3 Courses
+    %ul{ style: "list-style: dash;" }
+      - registration.courses.each do |course|
+        %li{ style: "margin-left: 17px;" }&= course
 
-  %div
-    %p
-      %a{ href: "/courses" } Register another participant
-    %p
-      %a{ href: "http://shaolinstpete.com" } Return to the main Shaolin Wahnam St. Pete web site
+  .one-third.last
+    %h3 Amount Charged
+    %p&= display_money registration.amount_paid
+
+  %hr
+
+  %p
+    %a{ href: "/courses" } Register another participant

@@ -84,12 +84,16 @@ post "/finalize" do
       registration_confirmation(@registration).
       deliver
 
-    haml :confirmation, locals: {registration: @registration, errors: ''}
+    haml :confirmation, locals: {registration: @registration}
   else
     haml :register, locals: {registration: @registration, errors: @registration.errors.full_messages.uniq.join("<br \>") }
   end
 end
 
+# useful for working on the design of /confirmation
+# get "/confirmation" do
+#   haml :confirmation, locals: {registration: Registration.last}
+# end
 
 
 class UserMailer < ActionMailer::Base

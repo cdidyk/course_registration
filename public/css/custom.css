@@ -70,6 +70,14 @@ hr {
     padding-top: 0.5em;
 }
 
+ul.confirmation {
+    list-style: none;
+}
+
+ul.confirmation li {
+    margin-left: 0;
+}
+
 dl dt {
     font-weight: bold;
 }
