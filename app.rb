@@ -94,6 +94,10 @@ post "/finalize" do
       registration_confirmation(@registration).
       deliver
 
+    UserMailer.
+      registration_notice(@registration).
+      deliver
+
     haml :confirmation, locals: {registration: @registration}
   else
     haml :register, locals: {registration: @registration, errors: @registration.errors.full_messages.uniq.join(", ") }
@@ -113,6 +117,12 @@ class UserMailer < ActionMailer::Base
     @registration = registration
     @amount_paid = MoneyFormatter.display registration.amount_paid
     mail to: registration.email, subject: "#{registration.event} registration confirmation"
+  end
+
+  def registration_notice registration
+    @registration = registration
+    @amount_paid = MoneyFormatter.display registration.amount_paid
+    mail to: "cdidyk@gmail.com", subject: "New Course Registration -#{registration.name}"
   end
 end
 

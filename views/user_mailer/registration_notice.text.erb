@@ -1,0 +1,18 @@
+New course registration! Yay!
+
+We're another step closer to making the <%= @registration.event %> successful for everyone.
+
+Here is the confirmed registration info:
+
+Name: <%= @registration.name %>
+Email: <%= @registration.email %>
+Phone: <%= @registration.phone %>
+
+Courses:
+<%- @registration.courses.each do |course| %>
+  - <%= course %>
+<%- end %>
+
+Amount Charged: <%= @amount_paid %>
+
+
