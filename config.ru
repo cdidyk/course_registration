@@ -3,5 +3,5 @@ require 'bundler'
 
 Bundler.require
 
-require './course_registration'
+require './app'
 run Sinatra::Application
