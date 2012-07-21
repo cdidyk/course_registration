@@ -34,7 +34,7 @@ namespace :deploy do
   end
 
   task :symlink_configs, roles: :app, except: { no_release: true, no_symlink: true } do
-    ["production.mongoid.yml"].each do |file|
+    ["production.mongoid.yml, stripe.yml"].each do |file|
       run "ln -nsf #{deploy_to}/shared/config/#{file} #{current_release}/config"
     end
   end
