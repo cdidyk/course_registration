@@ -6,7 +6,8 @@ gem 'actionmailer', '~> 3.2.0'   # for sending registration/payment confirmation
 gem 'mongoid', '~> 3.0.0'
 gem 'capistrano'
 gem 'haml'
-gem 'stripe'                      # for payment processing
+gem 'rdiscount'                  # for markdown in haml views
+gem 'stripe'                     # for payment processing
 gem 'coffee-script'
 gem 'unicorn'
 

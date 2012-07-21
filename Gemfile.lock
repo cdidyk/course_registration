@@ -73,6 +73,7 @@ GEM
     rack-test (0.6.1)
       rack (>= 1.0)
     raindrops (0.8.0)
+    rdiscount (1.6.8)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rspec (2.11.0)
@@ -122,6 +123,7 @@ DEPENDENCIES
   haml
   mongoid (~> 3.0.0)
   rack-test
+  rdiscount
   rspec
   sinatra
   sinatra-contrib
