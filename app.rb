@@ -21,7 +21,16 @@ configure :development do
 end
 
 configure :production do
-  # intentionally blank...for now
+  Mongoid.load! File.join(File.dirname(__FILE__), "config/production.mongoid.yml")
+  Mongoid.logger.level = Logger::WARN
+
+  Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['private_key']
+
+  ActionMailer::Base.delivery_method = :file
+  ActionMailer::Base.logger = Logger.new(STDOUT)
+  ActionMailer::Base.perform_deliveries = true
+  ActionMailer::Base.raise_delivery_errors = true
+  ActionMailer::Base.view_paths = File.join Sinatra::Application.root, 'views'
 end
 
 set :haml, format: :html5

@@ -8,6 +8,7 @@ gem 'capistrano'
 gem 'haml'
 gem 'stripe'                      # for payment processing
 gem 'coffee-script'
+gem 'unicorn'
 
 group :test do
   gem 'rack-test'

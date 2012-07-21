@@ -43,6 +43,7 @@ GEM
     hike (1.2.1)
     i18n (0.6.0)
     journey (1.0.3)
+    kgio (2.7.2)
     mail (2.4.1)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -71,6 +72,7 @@ GEM
       rack
     rack-test (0.6.1)
       rack (>= 1.0)
+    raindrops (0.8.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rspec (2.11.0)
@@ -104,6 +106,10 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.33)
+    unicorn (4.2.0)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
 
 PLATFORMS
   ruby
@@ -120,3 +126,4 @@ DEPENDENCIES
   sinatra
   sinatra-contrib
   stripe
+  unicorn
