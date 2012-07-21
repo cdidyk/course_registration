@@ -26,8 +26,6 @@ configure :production do
 
   Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['private_key']
 
-  ActionMailer::Base.delivery_method = :file
-  ActionMailer::Base.logger = Logger.new(STDOUT)
   ActionMailer::Base.perform_deliveries = true
   ActionMailer::Base.raise_delivery_errors = true
   ActionMailer::Base.view_paths = File.join Sinatra::Application.root, 'views'
