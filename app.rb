@@ -11,7 +11,9 @@ configure :development do
   Mongoid.load! File.join(File.dirname(__FILE__), "config/development.mongoid.yml")
   Mongoid.logger.level = Logger::DEBUG
 
-  Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['private_key']
+  stripe_keys = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))
+  Stripe.api_key = stripe_keys['private_key']
+  STRIPE_PUBLIC_KEY = stripe_keys['public_key']
 
   ActionMailer::Base.delivery_method = :file
   ActionMailer::Base.logger = Logger.new(STDOUT)
@@ -24,7 +26,9 @@ configure :production do
   Mongoid.load! File.join(File.dirname(__FILE__), "config/production.mongoid.yml")
   Mongoid.logger.level = Logger::WARN
 
-  Stripe.api_key = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))['private_key']
+  stripe_keys = YAML.load_file(File.join(File.dirname(__FILE__), "config/stripe.yml"))
+  Stripe.api_key = stripe_keys['private_key']
+  STRIPE_PUBLIC_KEY = stripe_keys['public_key']
 
   ActionMailer::Base.smtp_settings = {
     openssl_verify_mode: "none"

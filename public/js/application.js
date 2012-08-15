@@ -2,6 +2,8 @@
 jQuery('html').removeClass('no-js').addClass('js');
 
 $(document).ready(function() {
+    Stripe.setPublishableKey( $('meta[name="stripe-key"]').attr('content') );
+
     $("#payment_form").submit(function(event) {
         // disable the submit button to prevent repeated clicks
         $('#submit_button').attr("disabled", "disabled");
