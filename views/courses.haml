@@ -27,7 +27,7 @@
               %h4.accented 9am to 12pm
             %li
               %p
-                %input{ type: "checkbox", name: "courses[]", id: "generating_energy_flow", value: "Generating Energy Flow" }
+                %input{ type: "checkbox", name: "courses[]", id: "generating_energy_flow", value: "Generating Energy Flow", checked: checked?("Generating Energy Flow") }
                 %label{ for: "generating_energy_flow" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
           :markdown
@@ -52,7 +52,7 @@
               %h4.accented 2pm to 7pm
             %li
               %p
-                %input{ type: "checkbox", name: "courses[]", id: "all_tcc", value: "Fundamentals of Tai Chi Chuan" }
+                %input{ type: "checkbox", name: "courses[]", id: "all_tcc", value: "Fundamentals of Tai Chi Chuan", checked: checked?("Fundamentals of Tai Chi Chuan") }
                 %label{ for: "all_tcc" } <strong>$500.00</strong> <em>Click here to register</em>
 
         .description
@@ -79,7 +79,7 @@
               %h4.accented 9am to 12pm
             %li
               %p
-                %input{ type: "checkbox", name: "courses[]", id: "cosmic_shower", value: "Cosmic Shower" }
+                %input{ type: "checkbox", name: "courses[]", id: "cosmic_shower", value: "Cosmic Shower", checked: checked?("Cosmic Shower") }
                 %label{ for: "cosmic_shower" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
           :markdown
@@ -101,7 +101,7 @@
               %h4.accented 2pm to 7pm
             %li
               %p
-                %input{ type: "checkbox", name: "courses[]", id: "yang", value: "108-Pattern Yang style Tai Chi Chuan" }
+                %input{ type: "checkbox", name: "courses[]", id: "yang", value: "108-Pattern Yang style Tai Chi Chuan", checked: checked?("108-Pattern Yang style Tai Chi Chuan") }
                 %label{ for: "yang" } <strong>$500.00</strong> <em>Click here to register</em>
         .description
           :markdown
@@ -125,7 +125,7 @@
               %h4.accented 9am to 12pm
             %li
               %p
-                %input{ type: "checkbox", name: "courses[]", id: "abdominal", value: "Abdominal Breathing" }
+                %input{ type: "checkbox", name: "courses[]", id: "abdominal", value: "Abdominal Breathing", checked: checked?("Abdominal Breathing") }
                 %label{ for: "abdominal" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
           :markdown
@@ -145,7 +145,7 @@
               %h4.accented 2pm to 7pm
             %li
               %p
-                %input{ type: "checkbox", name: "courses[]", id: "chen", value: "Flowing Water Floating Clouds" }
+                %input{ type: "checkbox", name: "courses[]", id: "chen", value: "Flowing Water Floating Clouds", checked: checked?("Flowing Water Floating Clouds") }
                 %label{ for: "chen" } <strong>$500.00</strong> <em>Click here to register</em>
         .description
           :markdown
@@ -169,7 +169,7 @@
               %h4.accented 9am to 12pm
             %li
               %p
-                %input{ type: "checkbox", name: "courses[]", id: "merging", value: "Merging with the Cosmos" }
+                %input{ type: "checkbox", name: "courses[]", id: "merging", value: "Merging with the Cosmos", checked: checked?("Merging with the Cosmos") }
                 %label{ for: "merging" } <strong>$300.00</strong> <em>Click here to register</em>
         .description
           :markdown
@@ -191,7 +191,7 @@
               %h4.accented 2pm to 7pm
             %li
               %p
-                %input{ type: "checkbox", name: "courses[]", id: "wudang", value: "Wudang Tai Chi Chuan" }
+                %input{ type: "checkbox", name: "courses[]", id: "wudang", value: "Wudang Tai Chi Chuan", checked: checked?("Wudang Tai Chi Chuan") }
                 %label{ for: "wudang" } <strong>$500.00</strong> <em>Click here to register</em>
         .description
           :markdown
@@ -206,34 +206,49 @@
     %h2.align-center <a name="pricing"></a>Pricing
 
     %table.pricing
+      %thead
+        %tr
+          %td &nbsp;
+          %td Wahnam Members
+          %td Non-Members
       %tbody
         %tr
           %td One Chi Kung Course
           %td $300
+          %td $300
         %tr
           %td One Tai Chi Chuan Course
           %td $500
+          %td $1000
         %tr
           %td One Chi Kung Course + One Tai Chi Chuan Course
-          %td <del>$800</del>&nbsp;<span class="accented">$700</span>
+          %td <del>$800</del><br /><span class="accented">$700</span>
+          %td <del>$1300</del><br /><span class="accented">$1200</span>
         %tr
           %td All Four Chi Kung Courses
-          %td <del>$1200</del>&nbsp;<span class="accented">$1000</span>
+          %td <del>$1200</del><br /><span class="accented">$1000</span>
+          %td <del>$1200</del><br /><span class="accented">$1000</span>
         %tr
           %td All Four Tai Chi Chuan Courses
-          %td <del>$2000</del>&nbsp;<span class="accented">$1300</span>
+          %td <del>$2000</del><br /><span class="accented">$1300</span>
+          %td <del>$4000</del><br /><span class="accented">$2600</span>
         %tr
           %td
             %strong ALL EIGHT COURSES
           %td
-            %strong <del>$3200</del>&nbsp;<span class="accented">$1800!</span>
+            %strong <del>$3200</del><br /><span class="accented">$1800!</span>
+          %td
+            %strong <del>$5200</del><br /><span class="accented">$3000!</span>
 
     %p.align-center
       %strong Anyone not satisfied with a course will have a full refund without question if he or she informs the organizer about his or her dissatisfaction during or immediately after the course completes.
 
-    %p Please note that because of the way these incredible discounts are structured, there are cases where it is actually cheaper to take more courses than you initially register for. For instance, it is the same price to sign up for three Tai Chi Chuan as it is to sign up for four! We're doing this because each of these courses is a treasure, and this is probably the only time Grandmaster Wong will ever teach these Tai Chi Chuan courses in the United States!
+    %p Please note that because of the way these incredible discounts are structured, there are cases where it is actually cheaper to take more courses than you initially register for. For instance, it is the same price to sign up for three Tai Chi Chuan courses as it is to sign up for four! We're doing this because each of these courses is a treasure, and this is probably the only time Grandmaster Wong will ever teach these Tai Chi Chuan courses in the United States!
     %p Regardless of whether you take advantage of it, rest assured that this registration system is set up to always give you the best discount based on the courses you select. However, it will faithfully only register you for the courses you choose!
 
+    %p.align-center
+      %label{ for: "member_code" } Member Code
+      %input{ type: "text", name: "member_code", id: "member_code", value: params[:member_code] }
     %p.align-center
       %input{ type: "submit", value: "Register" }
     %p.align-center

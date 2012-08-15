@@ -56,8 +56,8 @@ hr {
 }
 
 .pricing {
-    width: 50%;
-    margin: auto 25% 2em 25%;
+    width: 60%;
+    margin: auto 20% 2em 20%;
     font-size: 120%;
 }
 
@@ -68,6 +68,7 @@ hr {
 .pricing td {
     text-align: left;
     padding-top: 0.5em;
+    padding-right: 1em;
 }
 
 ul.confirmation {

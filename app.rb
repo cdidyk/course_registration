@@ -47,6 +47,12 @@ helpers do
   def display_money cents
     MoneyFormatter.display cents
   end
+
+  def checked? value
+    return nil unless params[:courses]
+
+    params[:courses].include?(value) ? "checked" : nil
+  end
 end
 
 get "/courses" do
@@ -55,13 +61,19 @@ end
 
 post "/register" do
   courses = params[:courses]
+  coupon = params[:member_code].blank? ? nil : Coupon.where(code: params[:member_code].downcase).first
 
   if courses.blank?
     haml :courses, locals: {errors: "Please check the boxes by the courses you wish to register for"}
+  elsif coupon.blank? && params[:member_code].present?
+    haml :courses, locals: {errors: "The Member Code you entered is invalid. Please enter a valid one or remove the code."}
   else
+    price_calc = PriceCalculator.new courses
+    coupon ? price_calc.extend(MemberPricing) : price_calc.extend(NonMemberPricing)
     registration =
       Registration.new(courses: courses,
-                       amount_paid: PriceCalculator.new(courses).total)
+                       coupon: coupon,
+                       amount_paid: price_calc.total)
     haml :register, locals: {errors: "", registration: registration}
   end
 end
@@ -131,6 +143,21 @@ class UserMailer < ActionMailer::Base
 end
 
 
+class Coupon
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  field :code, type: String
+  field :description, type: String
+
+  has_many :registrations
+
+  index({code: 1})
+
+  validates_presence_of :code
+  validates_uniqueness_of :code
+
+end
 
 class Registration
   include Mongoid::Document
@@ -144,6 +171,8 @@ class Registration
   field :stripe_charge_id, type: String
   field :courses, type: Array
   field :event, type: String
+
+  belongs_to :coupon
 
   #NOTE maybe add an event index in the future if helpful
   index({name: 1})
@@ -160,8 +189,57 @@ class MoneyFormatter
   end
 end
 
+module MemberPricing
+  # Member pricing structure:
+  # 1 CK course: $300
+  # 1 TCC course: $500
+  # 1 CK course + 1 TCC course: $700
+  # all CK courses: $1000
+  # all TCC courses: $1300
+  # everything: $1800
+  def prices
+    { ck_unit_price: 30000,
+      tcc_unit_price: 50000,
+      one_of_each_price: 70000,
+      all_ck_price: 100000,
+      all_tcc_price: 130000,
+      everything_price: 180000 }
+  end
+  # CK_UNIT_PRICE = 30000
+  # TCC_UNIT_PRICE = 50000
+  # ONE_OF_EACH_PRICE = 70000
+  # ALL_CK_PRICE = 100000
+  # ALL_TCC_PRICE = 130000
+  # EVERYTHING_PRICE = 180000
+end
+
+module NonMemberPricing
+  # Non-member pricing structure:
+  # 1 CK course: $300
+  # 1 TCC course: $1000
+  # 1 CK course + 1 TCC course: $1200
+  # all CK courses: $1000
+  # all TCC courses: $2600
+  # everything: $3000
+  def prices
+    { ck_unit_price: 30000,
+      tcc_unit_price: 100000,
+      one_of_each_price: 120000,
+      all_ck_price: 100000,
+      all_tcc_price: 260000,
+      everything_price: 300000 }
+  end
+  # CK_UNIT_PRICE = 30000
+  # TCC_UNIT_PRICE = 100000
+  # ONE_OF_EACH_PRICE = 120000
+  # ALL_CK_PRICE = 100000
+  # ALL_TCC_PRICE = 260000
+  # EVERYTHING_PRICE = 300000
+end
+
+#NOTE this class must extend a Pricing module to work
 class PriceCalculator
-  attr_reader :courses, :tcc, :ck
+  attr_reader :courses, :tcc, :ck, :coupon
 
   CK_COURSE_LIST = ["Generating Energy Flow",
                     "Cosmic Shower",
@@ -172,20 +250,6 @@ class PriceCalculator
                      "Flowing Water Floating Clouds",
                      "Wudang Tai Chi Chuan"]
 
-  # Pricing structure:
-  # 1 CK course: $300
-  # 1 TCC course: $500
-  # 1 CK course + 1 TCC course: $700
-  # all CK courses: $1000
-  # all TCC courses: $1300
-  # everything: $1800
-  CK_UNIT_PRICE = 30000
-  TCC_UNIT_PRICE = 50000
-  ONE_OF_EACH_PRICE = 70000
-  ALL_CK_PRICE = 100000
-  ALL_TCC_PRICE = 130000
-  EVERYTHING_PRICE = 180000
-
   def initialize courses
     @courses = courses.uniq
     @tcc = @courses.find_all {|c| TCC_COURSE_LIST.include? c }
@@ -195,32 +259,32 @@ class PriceCalculator
   #NOTE in cents
   def total
     if tcc.size == 0
-      [(ck.size * CK_UNIT_PRICE), ALL_CK_PRICE].min
+      [(ck.size * prices[:ck_unit_price]), prices[:all_ck_price]].min
     elsif ck.size == 0
-      [(tcc.size * TCC_UNIT_PRICE), ALL_TCC_PRICE].min
+      [(tcc.size * prices[:tcc_unit_price]), prices[:all_tcc_price]].min
     else
-      [one_of_each_strategy, all_ck_strategy, all_tcc_strategy, EVERYTHING_PRICE].min
+      [one_of_each_strategy, all_ck_strategy, all_tcc_strategy, prices[:everything_price]].min
     end
   end
 
   def one_of_each_strategy
     course_pairs = [tcc.size, ck.size].min
-    sticker_price = ONE_OF_EACH_PRICE * course_pairs
+    sticker_price = prices[:one_of_each_price] * course_pairs
 
     if tcc.size > ck.size
-      sticker_price += (tcc.size - course_pairs) * TCC_UNIT_PRICE
+      sticker_price += (tcc.size - course_pairs) * prices[:tcc_unit_price]
     else
-      sticker_price += (ck.size - course_pairs) * CK_UNIT_PRICE
+      sticker_price += (ck.size - course_pairs) * prices[:ck_unit_price]
     end
 
     sticker_price
   end
 
   def all_ck_strategy
-    ALL_CK_PRICE + (tcc.size * TCC_UNIT_PRICE)
+    prices[:all_ck_price] + (tcc.size * prices[:tcc_unit_price])
   end
 
   def all_tcc_strategy
-    ALL_TCC_PRICE + (ck.size * CK_UNIT_PRICE)
+    prices[:all_tcc_price] + (ck.size * prices[:ck_unit_price])
   end
 end

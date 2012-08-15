@@ -15,6 +15,7 @@ configure :test do
   ActionMailer::Base.raise_delivery_errors = true
   ActionMailer::Base.view_paths = File.join Sinatra::Application.root, 'views'
 
+  STRIPE_PUBLIC_KEY = "some key"
 
   RSpec.configure do |config|
     config.mock_with :rspec
@@ -171,170 +172,330 @@ describe PriceCalculator do
       it "should be $300 for 1 Chi Kung course" do
         PriceCalculator.
           new([courses[:energy_flow]]).
+          extend(MemberPricing).
           total.should == 30000
-      end
+
+        PriceCalculator.
+          new([courses[:energy_flow]]).
+          extend(NonMemberPricing).
+          total.should == 30000
+        end
 
       it "should be $600 for 2 Chi Kung courses" do
         PriceCalculator.
           new([courses[:energy_flow], courses[:shower]]).
+          extend(MemberPricing).
+          total.should == 60000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower]]).
+          extend(NonMemberPricing).
           total.should == 60000
       end
 
       it "should be $900 for 3 Chi Kung courses" do
         PriceCalculator.
           new([courses[:energy_flow], courses[:shower], courses[:ab]]).
+          extend(MemberPricing).
+          total.should == 90000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab]]).
+          extend(NonMemberPricing).
           total.should == 90000
       end
 
       it "should be $1000 for all 4 Chi Kung courses" do
         PriceCalculator.
           new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos]]).
+          extend(MemberPricing).
+          total.should == 100000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos]]).
+          extend(NonMemberPricing).
           total.should == 100000
       end
     end
 
     context "Tai Chi Chuan only" do
-      it "should be $500 for 1 Tai Chi Chuan course" do
+      it "should be $500/$1000 for 1 Tai Chi Chuan course" do
         PriceCalculator.
           new([courses[:tcc]]).
+          extend(MemberPricing).
           total.should == 50000
-      end
 
-      it "should be $1000 for 2 Tai Chi Chuan courses" do
         PriceCalculator.
-          new([courses[:tcc], courses[:wudang]]).
+          new([courses[:tcc]]).
+          extend(NonMemberPricing).
           total.should == 100000
       end
 
-      it "should be $1300 for 3 Tai Chi Chuan courses" do
+      it "should be $1000/$2000 for 2 Tai Chi Chuan courses" do
         PriceCalculator.
-          new([courses[:tcc], courses[:yang], courses[:wudang]]).
-          total.should == 130000
+          new([courses[:tcc], courses[:wudang]]).
+          extend(MemberPricing).
+          total.should == 100000
+
+        PriceCalculator.
+          new([courses[:tcc], courses[:wudang]]).
+          extend(NonMemberPricing).
+          total.should == 200000
       end
 
-      it "should be $1300 for all 4 Tai Chi Chuan courses" do
+      it "should be $1300/$2600 for 3 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:tcc], courses[:yang], courses[:wudang]]).
+          extend(MemberPricing).
+          total.should == 130000
+
+        PriceCalculator.
+          new([courses[:tcc], courses[:yang], courses[:wudang]]).
+          extend(NonMemberPricing).
+          total.should == 260000
+      end
+
+      it "should be $1300/$2600 for all 4 Tai Chi Chuan courses" do
         PriceCalculator.
           new([courses[:tcc], courses[:yang], courses[:chen], courses[:wudang]]).
+          extend(MemberPricing).
           total.should == 130000
+
+        PriceCalculator.
+          new([courses[:tcc], courses[:yang], courses[:chen], courses[:wudang]]).
+          extend(NonMemberPricing).
+          total.should == 260000
       end
     end
 
     context "combinations of Chi Kung and Tai Chi Chuan courses" do
-      it "should be $700 for 1 Chi Kung course and 1 Tai Chi Chuan course" do
+      it "should be $700/$1200 for 1 Chi Kung course and 1 Tai Chi Chuan course" do
         PriceCalculator.
           new([courses[:energy_flow],
                courses[:tcc]]).
+          extend(MemberPricing).
           total.should == 70000
-      end
 
-      it "should be $1200 for 1 Chi Kung course and 2 Tai Chi Chuan courses" do
         PriceCalculator.
           new([courses[:energy_flow],
-               courses[:tcc], courses[:wudang]]).
+               courses[:tcc]]).
+          extend(NonMemberPricing).
           total.should == 120000
       end
 
-      it "should be $1600 for 1 Chi Kung course and 3 Tai Chi Chuan courses" do
+      it "should be $1200/$2200 for 1 Chi Kung course and 2 Tai Chi Chuan courses" do
         PriceCalculator.
           new([courses[:energy_flow],
-               courses[:tcc], courses[:wudang], courses[:chen]]).
-          total.should == 160000
-      end
-
-      it "should be $1600 for 1 Chi Kung course and all 4 Tai Chi Chuan courses" do
-        PriceCalculator.
-          new([courses[:energy_flow],
-               courses[:tcc], courses[:wudang], courses[:chen], courses[:yang]]).
-          total.should == 160000
-      end
-
-      it "should be $1000 for 2 Chi Kung courses and 1 Tai Chi Chuan course" do
-        PriceCalculator.
-          new([courses[:energy_flow], courses[:cosmos],
-               courses[:tcc]]).
-          total.should == 100000
-      end
-
-      it "should be $1400 for 2 Chi Kung courses and 2 Tai Chi Chuan courses" do
-        PriceCalculator.
-          new([courses[:energy_flow], courses[:cosmos],
-               courses[:wudang], courses[:chen]]).
-          total.should == 140000
-      end
-
-      it "should be $1800 for 2 Chi Kung courses and 3 Tai Chi Chuan courses" do
-        PriceCalculator.
-          new([courses[:energy_flow], courses[:cosmos],
-               courses[:tcc], courses[:wudang], courses[:chen]]).
-          total.should == 180000
-      end
-
-      it "should be $1800 for 2 Chi Kung courses and all 4 Tai Chi Chuan courses" do
-        PriceCalculator.
-          new([courses[:energy_flow], courses[:cosmos],
-               courses[:tcc], courses[:yang], courses[:wudang], courses[:chen]]).
-          total.should == 180000
-      end
-
-      it "should be $1300 for 3 Chi Kung courses and 1 Tai Chi Chuan course" do
-        PriceCalculator.
-          new([courses[:energy_flow], courses[:shower], courses[:ab],
-               courses[:tcc]]).
-          total.should == 130000
-      end
-
-      it "should be $1700 for 3 Chi Kung courses and 2 Tai Chi Chuan courses" do
-        PriceCalculator.
-          new([courses[:energy_flow], courses[:shower], courses[:ab],
                courses[:tcc], courses[:wudang]]).
-          total.should == 170000
+          extend(MemberPricing).
+          total.should == 120000
+
+        PriceCalculator.
+          new([courses[:energy_flow],
+               courses[:tcc], courses[:wudang]]).
+          extend(NonMemberPricing).
+          total.should == 220000
       end
 
-      it "should be $1800 for 3 Chi Kung courses and 3 Tai Chi Chuan courses" do
+      it "should be $1600/$2900 for 1 Chi Kung course and 3 Tai Chi Chuan courses" do
         PriceCalculator.
-          new([courses[:energy_flow], courses[:shower], courses[:ab],
+          new([courses[:energy_flow],
                courses[:tcc], courses[:wudang], courses[:chen]]).
-          total.should == 180000
+          extend(MemberPricing).
+          total.should == 160000
+
+        PriceCalculator.
+          new([courses[:energy_flow],
+               courses[:tcc], courses[:wudang], courses[:chen]]).
+          extend(NonMemberPricing).
+          total.should == 290000
       end
 
-      it "should be $1800 for 3 Chi Kung courses and all 4 Tai Chi Chuan courses" do
+      it "should be $1600/$2900 for 1 Chi Kung course and all 4 Tai Chi Chuan courses" do
         PriceCalculator.
-          new([courses[:energy_flow], courses[:shower], courses[:ab],
+          new([courses[:energy_flow],
                courses[:tcc], courses[:wudang], courses[:chen], courses[:yang]]).
-          total.should == 180000
+          extend(MemberPricing).
+          total.should == 160000
+
+        PriceCalculator.
+          new([courses[:energy_flow],
+               courses[:tcc], courses[:wudang], courses[:chen], courses[:yang]]).
+          extend(NonMemberPricing).
+          total.should == 290000
       end
 
-      it "should be $1500 for all 4 Chi Kung courses and 1 Tai Chi Chuan course" do
+      it "should be $1000/1500 for 2 Chi Kung courses and 1 Tai Chi Chuan course" do
         PriceCalculator.
-          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
+          new([courses[:energy_flow], courses[:cosmos],
                courses[:tcc]]).
+          extend(MemberPricing).
+          total.should == 100000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:tcc]]).
+          extend(NonMemberPricing).
           total.should == 150000
       end
 
-      it "should be $1800 for all 4 Chi Kung courses and 2 Tai Chi Chuan courses" do
+      it "should be $1400/$2400 for 2 Chi Kung courses and 2 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:wudang], courses[:chen]]).
+          extend(MemberPricing).
+          total.should == 140000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:wudang], courses[:chen]]).
+          extend(NonMemberPricing).
+          total.should == 240000
+      end
+
+      it "should be $1800/$3000 for 2 Chi Kung courses and 3 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:tcc], courses[:wudang], courses[:chen]]).
+          extend(MemberPricing).
+          total.should == 180000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:tcc], courses[:wudang], courses[:chen]]).
+          extend(NonMemberPricing).
+          total.should == 300000
+      end
+
+      it "should be $1800/$3000 for 2 Chi Kung courses and all 4 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:tcc], courses[:yang], courses[:wudang], courses[:chen]]).
+          extend(MemberPricing).
+          total.should == 180000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:cosmos],
+               courses[:tcc], courses[:yang], courses[:wudang], courses[:chen]]).
+          extend(NonMemberPricing).
+          total.should == 300000
+      end
+
+      it "should be $1300/$1800 for 3 Chi Kung courses and 1 Tai Chi Chuan course" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc]]).
+          extend(MemberPricing).
+          total.should == 130000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc]]).
+          extend(NonMemberPricing).
+          total.should == 180000
+      end
+
+      it "should be $1700/$2700 for 3 Chi Kung courses and 2 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang]]).
+          extend(MemberPricing).
+          total.should == 170000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang]]).
+          extend(NonMemberPricing).
+          total.should == 270000
+      end
+
+      it "should be $1800/$3000 for 3 Chi Kung courses and 3 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang], courses[:chen]]).
+          extend(MemberPricing).
+          total.should == 180000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang], courses[:chen]]).
+          extend(NonMemberPricing).
+          total.should == 300000
+      end
+
+      it "should be $1800/$3000 for 3 Chi Kung courses and all 4 Tai Chi Chuan courses" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang], courses[:chen], courses[:yang]]).
+          extend(MemberPricing).
+          total.should == 180000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab],
+               courses[:tcc], courses[:wudang], courses[:chen], courses[:yang]]).
+          extend(NonMemberPricing).
+          total.should == 300000
+      end
+
+      it "should be $1500/$2000 for all 4 Chi Kung courses and 1 Tai Chi Chuan course" do
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
+               courses[:tcc]]).
+          extend(MemberPricing).
+          total.should == 150000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
+               courses[:tcc]]).
+          extend(NonMemberPricing).
+          total.should == 200000
+      end
+
+      it "should be $1800/$3000 for all 4 Chi Kung courses and 2 Tai Chi Chuan courses" do
         PriceCalculator.
           new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
                courses[:tcc], courses[:yang]]).
+          extend(MemberPricing).
           total.should == 180000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
+               courses[:tcc], courses[:yang]]).
+          extend(NonMemberPricing).
+          total.should == 300000
       end
 
-      it "should be $1800 for all 4 Chi Kung courses and 3 Tai Chi Chuan courses" do
+      it "should be $1800/$3000 for all 4 Chi Kung courses and 3 Tai Chi Chuan courses" do
         PriceCalculator.
           new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
                courses[:tcc], courses[:yang], courses[:chen]]).
+          extend(MemberPricing).
           total.should == 180000
+
+        PriceCalculator.
+          new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos],
+               courses[:tcc], courses[:yang], courses[:chen]]).
+          extend(NonMemberPricing).
+          total.should == 300000
       end
 
-      it "should be $1800 for all 4 Chi Kung courses and all 4 Tai Chi Chuan courses" do
+      it "should be $1800/$3000 for all 4 Chi Kung courses and all 4 Tai Chi Chuan courses" do
         PriceCalculator.
           new(courses.values).
+          extend(MemberPricing).
           total.should == 180000
+
+        PriceCalculator.
+          new(courses.values).
+          extend(NonMemberPricing).
+          total.should == 300000
       end
     end
 
     it "should ignore courses it doesn't recognize" do
       PriceCalculator.
         new([courses[:energy_flow], "Wishful Thinking"]).
+        extend(MemberPricing).
         total.should == 30000
     end
   end
