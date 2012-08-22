@@ -44,12 +44,13 @@ describe "/finalize" do
         name: 'Paul Funktower',
         email: 'pfunk@example.com',
         phone: '(555) 123-1234',
-        amount_paid: '30000' },
-      courses: 'Generating Energy Flow,The Essence of All Tai Chi Chuan',
+        amount_paid: '70000' },
+      courses: 'Generating Energy Flow,Fundamentals of Tai Chi Chuan',
+      member_code: 'something valid',
       stripeToken: 'abc123'
     }
   }
-  let(:stripe_charge) { stub Stripe::Charge, amount: 30000, id: 'jb007', fee: 900 }
+  let(:stripe_charge) { stub Stripe::Charge, amount: 70000, id: 'jb007', fee: 2060 }
   let(:registration) {
     Registration.new(
          name: "name",
@@ -57,10 +58,11 @@ describe "/finalize" do
          phone: "phone",
          courses: ["Some", "Courses"],
          event: "2012 Tai Chi Chuan Festival",
-         amount_paid: 0)
+         amount_paid: 70000)
   }
 
   before :each do
+    Coupon.create! code: 'something valid'
     Stripe::Charge.stub create: stripe_charge
     registration.stub save: true
     Registration.stub new: registration
@@ -71,10 +73,10 @@ describe "/finalize" do
     it "should create a Stripe Charge" do
       Stripe::Charge.
         should_receive(:create).
-        with(amount: '30000',
+        with(amount: '70000',
              currency: 'usd',
              card: 'abc123',
-             description: 'Paul Funktower: Generating Energy Flow,The Essence of All Tai Chi Chuan').
+             description: 'Paul Funktower: Generating Energy Flow,Fundamentals of Tai Chi Chuan').
         and_return stripe_charge
 
       post '/finalize', params
@@ -91,10 +93,10 @@ describe "/finalize" do
           reg.name.should == "Paul Funktower"
           reg.email.should == "pfunk@example.com"
           reg.phone.should == "(555) 123-1234"
-          reg.amount_paid.should == 30000
-          reg.stripe_fee.should == 900
+          reg.amount_paid.should == 70000
+          reg.stripe_fee.should == 2060
           reg.stripe_charge_id.should == 'jb007'
-          reg.courses.should == ['Generating Energy Flow', 'The Essence of All Tai Chi Chuan']
+          reg.courses.should == ['Generating Energy Flow', 'Fundamentals of Tai Chi Chuan']
           reg.event.should == '2012 Tai Chi Chuan Festival'
         end
       end
@@ -134,6 +136,34 @@ describe "/finalize" do
         registration.should_not_receive(:save)
         post '/finalize', params
       end
+    end
+  end
+
+  context "when the Registration info has been mucked with" do
+    let(:params) {
+      { registration: {
+          name: 'Paul Funktower',
+          email: 'pfunk@example.com',
+          phone: '(555) 123-1234',
+          amount_paid: '1' },
+        courses: 'Generating Energy Flow,The Essence of All Tai Chi Chuan',
+        stripeToken: 'abc123'
+      }
+    }
+
+    it "should fix the amount paid and ask the user to try again" do
+      pending
+    end
+
+    it "should not save the registration" do
+      registration.should_not_receive(:valid?)
+      registration.should_not_receive(:save)
+      post '/finalize', params
+    end
+
+    it "should not generate a Stripe charge" do
+      Stripe.should_not_receive(:create)
+      post '/finalize', params
     end
   end
 

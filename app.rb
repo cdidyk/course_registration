@@ -80,11 +80,24 @@ end
 
 #TODO change from /finalize to /confirmation ?
 post "/finalize" do
+  courses = params[:courses].split(',')
+  coupon = params[:member_code].blank? ? nil : Coupon.where(code: params[:member_code].downcase).first
+
   @registration =
     Registration.
       new( params[:registration].
-             merge({courses: params[:courses].split(','),
+             merge({courses: courses,
+                    coupon: coupon,
                     event: "2012 Tai Chi Chuan Festival"}) )
+
+  price_calc = PriceCalculator.new courses
+  coupon ? price_calc.extend(MemberPricing) : price_calc.extend(NonMemberPricing)
+
+  if @registration.amount_paid != price_calc.total
+    puts "#{@registration.amount_paid} vs. #{price_calc.total}"
+    @registration.amount_paid = price_calc.total
+    return haml(:register, locals: {registration: @registration, errors: "There was an internet hiccup that prevented us from successfully processing your registration. Please try again. (Don't worry, you weren't billed.)"})
+  end
 
   if @registration.valid?
     begin

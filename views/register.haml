@@ -3,6 +3,7 @@
 
   %form{ action: "/finalize", method: "post", id: "payment_form" }
     %input{ type: "hidden", name: "registration[amount_paid]", value: registration.amount_paid }
+    %input{ type: "hidden", name: "member_code", value: registration.coupon.try(:code) }
     %input{ type: "hidden", name: "courses", value: registration.courses.join(',') }
 
     %div.pricing{ style: "border: 1px solid; padding: 5px;" }
