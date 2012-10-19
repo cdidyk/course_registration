@@ -39,6 +39,8 @@ configure :production do
 end
 
 set :haml, format: :html5
+set :discounts, false
+
 
 helpers do
   include Rack::Utils
@@ -94,7 +96,6 @@ post "/finalize" do
   coupon ? price_calc.extend(MemberPricing) : price_calc.extend(NonMemberPricing)
 
   if @registration.amount_paid != price_calc.total
-    puts "#{@registration.amount_paid} vs. #{price_calc.total}"
     @registration.amount_paid = price_calc.total
     return haml(:register, locals: {registration: @registration, errors: "There was an internet hiccup that prevented us from successfully processing your registration. Please try again. (Don't worry, you weren't billed.)"})
   end
@@ -271,6 +272,10 @@ class PriceCalculator
 
   #NOTE in cents
   def total
+    if !settings.discounts
+      return (ck.size * prices[:ck_unit_price]) + (tcc.size * prices[:tcc_unit_price])
+    end
+
     if tcc.size == 0
       [(ck.size * prices[:ck_unit_price]), prices[:all_ck_price]].min
     elsif ck.size == 0

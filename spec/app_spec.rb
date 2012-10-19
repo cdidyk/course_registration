@@ -17,6 +17,8 @@ configure :test do
 
   STRIPE_PUBLIC_KEY = "some key"
 
+  set :discounts, true
+
   RSpec.configure do |config|
     config.mock_with :rspec
 
@@ -197,7 +199,77 @@ describe PriceCalculator do
       wudang: 'Wudang Tai Chi Chuan' }
   }
 
-  describe "#total" do
+  describe "#total (with discounts off)" do
+    before :each do
+      app.settings.discounts = false
+    end
+
+    it "should be $300 for 1 Chi Kung course" do
+      PriceCalculator.
+        new([courses[:energy_flow]]).
+        extend(MemberPricing).
+        total.should == 30000
+
+      PriceCalculator.
+        new([courses[:energy_flow]]).
+        extend(NonMemberPricing).
+        total.should == 30000
+    end
+
+    it "should be $1200 for 4 Chi Kung courses" do
+      PriceCalculator.
+        new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos]]).
+        extend(MemberPricing).
+        total.should == 120000
+
+      PriceCalculator.
+        new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos]]).
+        extend(NonMemberPricing).
+        total.should == 120000
+    end
+
+    it "should be $800/$1300 for 1 Chi Kung course + 1 Tai Chi Chuan course" do
+      PriceCalculator.
+        new([courses[:energy_flow], courses[:tcc]]).
+        extend(MemberPricing).
+        total.should == 80000
+
+      PriceCalculator.
+        new([courses[:energy_flow], courses[:tcc]]).
+        extend(NonMemberPricing).
+        total.should == 130000
+    end
+
+    it "should be $2000/$4000 for 4 Tai Chi Chuan courses" do
+      PriceCalculator.
+        new([courses[:tcc], courses[:yang], courses[:chen], courses[:wudang]]).
+        extend(MemberPricing).
+        total.should == 200000
+
+      PriceCalculator.
+        new([courses[:tcc], courses[:yang], courses[:chen], courses[:wudang]]).
+        extend(NonMemberPricing).
+        total.should == 400000
+    end
+
+    it "should be $3200/$5200 for all courses" do
+      PriceCalculator.
+        new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos], courses[:tcc], courses[:yang], courses[:chen], courses[:wudang]]).
+        extend(MemberPricing).
+        total.should == 320000
+
+      PriceCalculator.
+        new([courses[:energy_flow], courses[:shower], courses[:ab], courses[:cosmos], courses[:tcc], courses[:yang], courses[:chen], courses[:wudang]]).
+        extend(NonMemberPricing).
+        total.should == 520000
+    end
+  end
+
+  describe "#total (with discounts on)" do
+    before :each do
+      app.settings.discounts = true
+    end
+
     context "Chi Kung only" do
       it "should be $300 for 1 Chi Kung course" do
         PriceCalculator.
@@ -209,7 +281,7 @@ describe PriceCalculator do
           new([courses[:energy_flow]]).
           extend(NonMemberPricing).
           total.should == 30000
-        end
+      end
 
       it "should be $600 for 2 Chi Kung courses" do
         PriceCalculator.
